@@ -21,7 +21,7 @@ const OurMission = () => {
                         </Container>
                         <Container delay={0.1}>
                             <h2 className="text-3xl md:text-4xl font-semibold text-left tracking-tight mt-4">
-                                Impulsionar agências a entregarem viagens sem fricção
+                                Impulsionar pessoas e empresas a viajarem sem fricção
                             </h2>
                         </Container>
                         <Container delay={0.3}>

@@ -54,7 +54,7 @@ const OurStory = () => {
                                     Mais de 12 anos respirando viagens corporativas
                                 </h4>
                                 <div className="mt-2 text-base text-neutral-400">
-                                    Começamos como consultores de travel management e evoluímos construindo tecnologia para resolver gargalos reais das agências.
+                                    Começamos como consultores de travel management e evoluímos criando soluções para simplificar jornadas de viajantes corporativos.
                                 </div>
                             </div>
                         </Container>
@@ -67,10 +67,10 @@ const OurStory = () => {
                             </div>
                             <div className="flex-1">
                                 <h4 className="text-xl lg:text-2xl font-semibold font-heading">
-                                    Tecnologia co-criada com agências parceiras
+                                    Tecnologia co-criada com nossos clientes
                                 </h4>
                                 <div className="mt-2 text-base text-neutral-400">
-                                    Cada módulo nasce de sprints conjuntos com nossos clientes, garantindo aderência total às operações de alta demanda.
+                                    Cada melhoria nasce de sprints conjuntos com empresas atendidas, garantindo aderência total às necessidades de quem viaja.
                                 </div>
                             </div>
                         </Container>

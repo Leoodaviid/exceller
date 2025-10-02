@@ -9,7 +9,7 @@ import Image from "next/image"
 
 const IntegrationsSection = () => {
 
-    const [activeCategory, setActiveCategory] = useState<"all" | "gds" | "pagamentos" | "automacao">("all");
+    const [activeCategory, setActiveCategory] = useState<"all" | "gds" | "pagamentos" | "suporte">("all");
 
     const filteredIntegrations = INTEGRATIONS.filter(integration =>
         activeCategory === "all" ? true : integration.category === activeCategory

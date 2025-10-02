@@ -12,7 +12,7 @@ export const BLOGS = [
     },
     {
         title: "Tendências de distribuição aérea para 2025",
-        desc: "O que mudará com NDC, acordos direct connect e como preparar sua agência para novos modelos de comissão.",
+        desc: "O que mudará com NDC, acordos direct connect e como preparar sua empresa para novos modelos de comissão.",
         image: "/images/blog2.svg",
         category: "Mercado Aéreo",
         author: "Caio Martins",

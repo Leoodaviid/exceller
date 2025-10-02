@@ -34,7 +34,7 @@ const PricingHero = () => {
 
                     <Container delay={0.1}>
                         <h2 className="text-balance !leading-[1.25] text-center text-4xl md:text-6xl font-semibold tracking-tight mt-6 w-full">
-                            Planos que crescem com a sua agência
+                            Serviços personalizados para cada tipo de viagem
                         </h2>
                     </Container>
 

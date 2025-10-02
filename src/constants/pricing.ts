@@ -17,46 +17,46 @@ export type Plan = {
 
 export const PRICING_PLANS: Plan[] = [
     {
-        name: "Essencial",
-        badge: "Agências em crescimento",
-        description: "Para equipes que precisam acelerar cotações digitais com baixo esforço operacional.",
+        name: "Corporativo Essencial",
+        badge: "Ideal para equipes",
+        description: "Para empresas que precisam de agilidade em viagens de negócios recorrentes.",
         price: {
-            monthly: 219,
-            yearly: 2190,
+            monthly: 349,
+            yearly: 3490,
         },
         features: [
-            { text: "Comparador com até 5 fornecedores" },
-            { text: "Workflows de aprovação básicos" },
-            { text: "Painéis de economia e receita" },
-            { text: "Suporte em horário comercial" },
+            { text: "Cotações ilimitadas para América Latina" },
+            { text: "Atendimento em horário comercial" },
+            { text: "Envio de 3 opções por solicitação" },
+            { text: "Relatório mensal de economia" },
         ],
-        buttonText: "Começar agora",
+        buttonText: "Solicitar proposta",
     },
     {
-        name: "Enterprise",
-        badge: "Mais vendido",
-        description: "Ideal para operações com alto volume, acordos complexos e integrações personalizadas.",
+        name: "Premium Global",
+        badge: "Mais escolhido",
+        description: "Para viajantes exigentes e missões críticas que precisam de suporte 24/7 e rotas internacionais complexas.",
         price: {
-            monthly: 549,
-            yearly: 5490,
+            monthly: 799,
+            yearly: 7990,
         },
         features: [
-            { text: "Comparador ilimitado com GDS e NDC" },
-            { text: "Regras corporativas avançadas" },
-            { text: "API e webhooks para automações" },
-            { text: "Suporte 24/7 e gestor dedicado" },
+            { text: "Cotações globais com tarifas negociadas" },
+            { text: "Suporte 24/7 com gestor dedicado" },
+            { text: "Cobertura para remarcações e cancelamentos" },
+            { text: "Relatórios personalizados por viajante" },
         ],
-        buttonText: "Falar com vendas",
+        buttonText: "Agendar conversa",
         popular: true,
     }
 ];
 
 export const MARQUEE_ITEMS = [
-    "Tarifas em tempo real",
-    "Dados para negociar",
-    "Checkout seguro",
-    "Serviço 24/7",
-    "Escala sem fricção",
-    "Clientes mais fiéis",
-    "Operação previsível"
+    "Atendimento humano",
+    "Parcerias globais",
+    "Tarifas negociadas",
+    "Suporte 24/7",
+    "Viagens sem imprevistos",
+    "Relatórios transparentes",
+    "Experiências memoráveis"
 ];

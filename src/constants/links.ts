@@ -8,25 +8,19 @@ export const NAV_LINKS = [
         link: "/integrations",
     },
     {
-        name: "Planos",
-        link: "/pricing",
-    },
-    {
-        name: "Blog",
-        link: "/blog",
+        name: "Cotação",
+        link: "/quotation",
     },
 ];
 
 export const PRODUCT_LINKS = [
     { label: "Sobre a Exceller", href: "/about" },
     { label: "Integrações", href: "/integrations" },
-    { label: "Planos", href: "/pricing" },
-    { label: "Solicitar Demonstração", href: "/contact" },
+    { label: "Solicitar Cotação", href: "/quotation" },
+    { label: "Falar com Especialista", href: "/contact" },
 ];
 
 export const RESOURCES_LINKS = [
-    { label: "Blog", href: "/blog" },
     { label: "Central de Ajuda", href: "/help" },
-    { label: "Documentação da API", href: "/docs" },
     { label: "Fale Conosco", href: "/contact" },
 ];

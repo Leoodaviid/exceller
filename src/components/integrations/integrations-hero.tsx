@@ -25,13 +25,13 @@ const IntegrationsHero = () => {
 
                         <Container delay={0.1}>
                             <h2 className="text-balance !leading-[1.25] text-4xl md:text-6xl font-semibold tracking-tight mt-6 w-full">
-                                Conecte fornecedores, pagamentos e CRM em minutos
+                                Conectamos companhias aéreas e parceiros para você
                             </h2>
                         </Container>
 
                         <Container delay={0.2}>
                             <p className="text-base md:text-lg font-normal text-balance text-muted-foreground max-w-3xl mt-4">
-                                Unifique GDS, acordos diretos, gateways de pagamento e automações para operar cada cotação sem trocar de tela.
+                                A Exceller acessa GDS, acordos corporativos, meios de pagamento e parceiros estratégicos para garantir que a sua cotação tenha sempre a melhor combinação disponível.
                             </p>
                         </Container>
 
@@ -40,13 +40,13 @@ const IntegrationsHero = () => {
                                 <div className="flex items-center gap-2">
                                     <CheckCircle2Icon className="size-4 text-primary" />
                                     <span className="text-sm text-muted-foreground font-medium">
-                                        GDS, NDC e consolidadores em um único painel
+                                        Acesso direto a GDS, NDC e tarifas exclusivas
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <CheckCircle2Icon className="size-4 text-primary" />
                                     <span className="text-sm text-muted-foreground font-medium">
-                                        Pagamentos conciliados e conectados ao seu ERP
+                                        Processamos pagamentos e emissões com total segurança
                                     </span>
                                 </div>
                             </div>

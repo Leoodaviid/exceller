@@ -45,7 +45,7 @@ export const TESTIMONIALS = [
         company: "TravelOne",
         companyUrl: "https://travelone.com",
         image: "/images/testimonials/person1.jpg",
-        content: "Os dashboards mostram a economia por cliente e ajudam a provar o valor estratégico da agência.",
+        content: "Os relatórios deixam claro quanto economizamos por viajante e justificam cada decisão para a diretoria.",
         time: "15:05",
         date: "18 Nov 2024",
     },

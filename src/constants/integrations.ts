@@ -2,7 +2,7 @@ export type Integration = {
     name: string;
     description: string;
     icon: string;
-    category: "gds" | "pagamentos" | "automacao" | "all";
+    category: "gds" | "pagamentos" | "suporte" | "all";
 };
 
 export const INTEGRATION_CATEGORIES = [
@@ -11,7 +11,7 @@ export const INTEGRATION_CATEGORIES = [
         value: "all"
     },
     {
-        label: "GDS & Aéreas",
+        label: "Companhias & GDS",
         value: "gds"
     },
     {
@@ -19,8 +19,8 @@ export const INTEGRATION_CATEGORIES = [
         value: "pagamentos"
     },
     {
-        label: "Automação & CRM",
-        value: "automacao"
+        label: "Suporte & Experiência",
+        value: "suporte"
     }
 ] as const;
 
@@ -68,27 +68,27 @@ export const INTEGRATIONS: Integration[] = [
         category: "pagamentos"
     },
     {
-        name: "Salesforce",
-        description: "Sincronize oportunidades, follow-ups e dados de viagem com seu CRM.",
+        name: "Assistência 24h",
+        description: "Estrutura global de atendimento para emergências, remarcações e suporte durante a viagem.",
         icon: "/icons/threads.svg",
-        category: "automacao"
+        category: "suporte"
     },
     {
-        name: "HubSpot",
-        description: "Dispare jornadas automatizadas após cada cotação enviada.",
+        name: "Concierges parceiros",
+        description: "Rede de concierges em aeroportos e hotéis para melhorar a experiência do viajante.",
         icon: "/icons/new.svg",
-        category: "automacao"
+        category: "suporte"
     },
     {
-        name: "Zendesk",
-        description: "Centralize chamados de pós-venda e acompanhe SLAs de reemissão.",
+        name: "Seguro viagem",
+        description: "Integração com principais seguradoras para emitir coberturas junto à passagem.",
         icon: "/icons/figma.svg",
-        category: "automacao"
+        category: "suporte"
     },
     {
-        name: "Workato",
-        description: "Crie automações sem código conectando Exceller a ERPs e ferramentas de finanças.",
+        name: "Transfers e hospedagem",
+        description: "Parcerias com fornecedores globais para complementar sua viagem com serviços terrestres.",
         icon: "/icons/snapchat.svg",
-        category: "automacao"
+        category: "suporte"
     }
 ];
