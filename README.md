@@ -1,12 +1,8 @@
-# Verve – Modern SaaS Landing Page
+# Exceller – Modern SaaS Landing Page
 
 ## 🔥 Introduction
 
-Verve is a modern SaaS landing page and platform template designed for developer tools, automation, and digital product teams. It features beautiful marketing pages, pricing, integrations, blog, and more—all with a clean, responsive, and animated UI.
-
-## 🔗 Live Preview
-
-## 🎥 Watch the Preview Video on YouTube
+Exceller is a modern SaaS landing page and platform template designed for developer tools, automation, and digital product teams. It features beautiful marketing pages, pricing, integrations, blog, and more—all with a clean, responsive, and animated UI.
 
 ## 💻 Tech Stack
 
