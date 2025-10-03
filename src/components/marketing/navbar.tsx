@@ -47,10 +47,10 @@ const Navbar = () => {
             <Image
               src="/images/logo.png"
               alt="Exceller Logo"
-              width={32}
+              width={40}
               height={32}
             />
-            <span className="font-bold text-base">Exceller</span>
+            <span className="font-bold text-base">Exceller Agency</span>
           </Link>
         </motion.div>
 

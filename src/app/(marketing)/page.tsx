@@ -10,7 +10,7 @@ import Testimonials from "@/components/marketing/testimonials";
 
 const HomePage = () => {
   return (
-    <div className="w-full relative flex flex-col pt-16">
+    <div className="w-full relative flex flex-col pt-8 md:pt-16">
       <Hero />
       <HeroQuotation />
       <Companies />
