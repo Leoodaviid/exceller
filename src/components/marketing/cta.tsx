@@ -4,6 +4,7 @@ import Wrapper from "../global/wrapper";
 import Container from "../global/container";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import AirPlane from "../../../public/images/airplane.png";
 
 const CTA = () => {
   return (
@@ -40,7 +41,7 @@ const CTA = () => {
             <Container className="w-full lg:w-max mx-auto flex flex-col items-center">
               <div className="w-36 sm:w-56 md:w-72">
                 <Image
-                  src="/images/airplane.png"
+                  src={AirPlane}
                   alt="Airplane"
                   width={1024}
                   height={1024}

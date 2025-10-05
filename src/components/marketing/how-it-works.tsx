@@ -3,6 +3,9 @@ import Wrapper from "../global/wrapper";
 import Container from "../global/container";
 import Image from "next/image";
 import { ChartSpline, ClipboardCheck, ClipboardList } from "lucide-react";
+import Hiw from "../../../public/images/hiw.png";
+import Hiw2 from "../../../public/images/hiw2.png";
+import Hiw3 from "../../../public/images/hiw3.svg";
 
 const HowItWorks = () => {
   return (
@@ -43,7 +46,7 @@ const HowItWorks = () => {
               <div className="flex w-full">
                 <div className="w-full border border-border/50 rounded-lg">
                   <Image
-                    src="/images/hiw.png"
+                    src={Hiw}
                     alt="01"
                     width={1024}
                     height={1024}
@@ -57,7 +60,7 @@ const HowItWorks = () => {
               <div className="flex w-full">
                 <div className="w-full border border-border/50 rounded-lg">
                   <Image
-                    src="/images/hiw2.png"
+                    src={Hiw2}
                     alt="02"
                     width={1024}
                     height={1024}
@@ -106,7 +109,7 @@ const HowItWorks = () => {
               <div className="flex w-full">
                 <div className="w-full border border-border/50 rounded-lg">
                   <Image
-                    src="/images/hiw3.svg"
+                    src={Hiw3}
                     alt="03"
                     width={1024}
                     height={1024}

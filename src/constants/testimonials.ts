@@ -1,10 +1,15 @@
+import Person1 from "../../public/images/testimonials/person1.jpg";
+import Person2 from "../../public/images/testimonials/person2.jpg";
+import Person3 from "../../public/images/testimonials/person3.jpg";
+import Person4 from "../../public/images/testimonials/person4.jpg";
+
 export const TESTIMONIALS = [
     {
         name: "Marina Soares",
         role: "Gerente de Viagens",
         company: "Grupo Atlas",
         companyUrl: "https://grupoatlas.com.br",
-        image: "/images/testimonials/person1.jpg",
+        image: Person1,
         content: "Reduzimos 22% do gasto médio por trecho em três meses com os alertas automáticos da Exceller.",
         time: "09:12",
         date: "15 Fev 2025",
@@ -14,7 +19,7 @@ export const TESTIMONIALS = [
         role: "Diretor Comercial",
         company: "SkyBiz Travel",
         companyUrl: "https://skybiz.com.br",
-        image: "/images/testimonials/person2.jpg",
+        image: Person2,
         content: "O motor de tarifas concentra nossos GDS, NDC e consolidadores no mesmo painel. Ficou muito mais fácil negociar.",
         time: "11:48",
         date: "03 Mar 2025",
@@ -24,7 +29,7 @@ export const TESTIMONIALS = [
         role: "Coordenadora de Atendimento",
         company: "Voyager Corp",
         companyUrl: "https://voyager.com",
-        image: "/images/testimonials/person3.jpg",
+        image: Person3,
         content: "Ganhamos agilidade com respostas em menos de dois minutos e os clientes percebem isso na hora.",
         time: "17:26",
         date: "27 Jan 2025",
@@ -34,7 +39,7 @@ export const TESTIMONIALS = [
         role: "Head de Operações",
         company: "FlyNow",
         companyUrl: "https://flynow.com",
-        image: "/images/testimonials/person4.jpg",
+        image: Person4,
         content: "Integramos o checkout ao nosso ERP e eliminamos retrabalho manual nos fechamentos semanais.",
         time: "08:41",
         date: "09 Dez 2024",
@@ -44,7 +49,7 @@ export const TESTIMONIALS = [
         role: "Especialista em Tarifas",
         company: "TravelOne",
         companyUrl: "https://travelone.com",
-        image: "/images/testimonials/person1.jpg",
+        image: Person1,
         content: "Os relatórios deixam claro quanto economizamos por viajante e justificam cada decisão para a diretoria.",
         time: "15:05",
         date: "18 Nov 2024",
@@ -54,7 +59,7 @@ export const TESTIMONIALS = [
         role: "CEO",
         company: "Orbit Corporate",
         companyUrl: "https://orbitcorporate.com",
-        image: "/images/testimonials/person2.jpg",
+        image: Person2,
         content: "A Exceller trouxe previsibilidade e escala para o negócio sem perder nossa assinatura de atendimento.",
         time: "19:32",
         date: "04 Out 2024",

@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { TESTIMONIALS } from "@/constants";
 import Wrapper from "@/components/global/wrapper";
 import Container from "@/components/global/container";
@@ -10,7 +10,7 @@ type Testimonial = {
   role: string;
   company: string;
   companyUrl: string;
-  image: string;
+  image: StaticImageData;
   content: string;
   time: string;
   date: string;

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Container from "../global/container";
 import { Button } from "../ui/button";
 import { CheckCircle2Icon } from "lucide-react";
+import Integrations from "../../../public/images/integrations.png";
 
 const IntegrationsHero = () => {
   return (
@@ -62,7 +63,7 @@ const IntegrationsHero = () => {
           <Container className="w-full z-30 flex items-center justify-center rounded-full">
             <div className="w-[80%] h-[88%] bg-white/10 shadow-md rounded-full flex items-center justify-center">
               <Image
-                src="/images/integrations.png"
+                src={Integrations}
                 alt="Integrações Exceller"
                 priority
                 width={2932}
