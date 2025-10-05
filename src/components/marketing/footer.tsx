@@ -3,6 +3,7 @@ import Link from "next/link";
 import Container from "../global/container";
 import Wrapper from "../global/wrapper";
 import { PRODUCT_LINKS, RESOURCES_LINKS } from "@/constants";
+import Logo from "../../../public/images/logo.png";
 
 const Footer = () => {
   return (
@@ -17,7 +18,7 @@ const Footer = () => {
             <div className="flex flex-col items-start justify-start md:max-w-[300px]">
               <div className="flex items-center gap-2">
                 <Image
-                  src="/images/logo.png"
+                  src={Logo}
                   alt="Exceller Agency"
                   width={32}
                   height={32}

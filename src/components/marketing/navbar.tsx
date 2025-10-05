@@ -10,8 +10,14 @@ import Container from "../global/container";
 import Wrapper from "../global/wrapper";
 import MobileMenu from "./mobile-menu";
 import Image from "next/image";
+import Logo from "../../../public/images/logo.png";
+import { TUser } from "@/types/user";
 
-const Navbar = () => {
+interface NavbarProps {
+  user?: TUser;
+}
+
+const Navbar = ({ user }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
 
   useEffect(() => {
@@ -44,12 +50,7 @@ const Navbar = () => {
           transition={{ duration: 0.2 }}
         >
           <Link href="/" className="flex items-center gap-2">
-            <Image
-              src="/images/logo.png"
-              alt="Exceller Logo"
-              width={40}
-              height={32}
-            />
+            <Image src={Logo} alt="Exceller Logo" width={40} height={32} />
             <span className="font-bold text-base">Exceller Agency</span>
           </Link>
         </motion.div>
@@ -73,13 +74,26 @@ const Navbar = () => {
 
         <Container animation="fadeLeft" delay={0.1}>
           <div className="flex items-center gap-x-4">
-            <Link href="/contact" className="hidden lg:block">
-              <Button size="sm" variant="outline">
-                Falar com especialista
-              </Button>
-            </Link>
+            {user ? (
+              <Link
+                href={
+                  user?.role?.toUpperCase() === "ADMIN" ? "/system" : "/account"
+                }
+                className="hidden lg:block"
+              >
+                <Button size="sm" variant="outline">
+                  Minha conta
+                </Button>
+              </Link>
+            ) : (
+              <Link href="/auth/login" className="hidden lg:block">
+                <Button size="sm" variant="outline">
+                  Entrar
+                </Button>
+              </Link>
+            )}
             <div className="lg:hidden">
-              <MobileMenu />
+              <MobileMenu user={user} />
             </div>
           </div>
         </Container>
