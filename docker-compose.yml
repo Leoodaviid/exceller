@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: exceller-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: exceller_db
+      POSTGRES_USER: exceller_user
+      POSTGRES_PASSWORD: exceller_password
+      PGDATA: /var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+volumes:
+  postgres-data:
