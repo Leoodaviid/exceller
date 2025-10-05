@@ -14,8 +14,7 @@ const Faq = () => {
   return (
     <div className="flex flex-col items-center justify-center relative w-full py-16 lg:py-24 overflow-hidden">
       <div className="absolute top-0 -right-1/3 -z-10 ml-auto w-4/5 h-32 lg:h-48 rounded-full blur-[5rem] bg-[radial-gradient(86.02%_172.05%_at_50%_-40%,rgba(212,175,55,0.6)_0%,rgba(5,5,5,0)_80%)]"></div>
-
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_70%_at_90%_0%,#000_20%,transparent_70%)] h-full -z-10" />
+      <div className="absolute bottom-0 -left-1/3 -z-10 ml-auto w-4/5 h-32 lg:h-48 rounded-full blur-[5rem] bg-[radial-gradient(86.02%_172.05%_at_50%_-40%,rgba(212,175,55,0.6)_0%,rgba(5,5,5,0)_80%)]"></div>
 
       <Wrapper>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">

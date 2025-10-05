@@ -3,104 +3,163 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Calendar, MapPin, Search, Users } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { CalendarIcon, MapPinIcon, Search, UsersIcon } from "lucide-react";
+
 import { Card } from "@/components/ui/card";
-// Decorative background (radial + grid) like the Faq component
+import Image from "next/image";
+import TropicalImage from "../../../public/images/tropical.png";
+import Wrapper from "../global/wrapper";
+import Icons from "../global/icons";
+import Container from "../global/container";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Label } from "../ui/label";
 
 export function HeroQuotation() {
-  const [destination, setDestination] = useState("");
-  const [guests, setGuests] = useState("2");
+  const [tripType, setTripType] = useState("roundtrip");
 
   return (
-    <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden mt-8">
-      {/* Decorative background (radial + grid) similar to Faq */}
-      <div className="absolute top-0 -right-1/3 -z-10 ml-auto w-4/5 h-32 lg:h-48 rounded-full blur-[5rem] bg-[radial-gradient(86.02%_172.05%_at_50%_-40%,rgba(212,175,55,0.6)_0%,rgba(5,5,5,0)_80%)]" />
-
-      <div className="absolute bottom-0 lg:bottom-0 inset-x-0 mx-auto bg-primary/40 lg:bg-primary/60 rounded-full w-1/3 h-1/16 blur-[4rem]"></div>
-
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 py-20">
-        <div className="max-w-5xl mx-auto text-center space-y-8">
-          {/* Search Card */}
-          <Card className="bg-black/95 backdrop-blur-sm p-6 md:p-8 shadow-2xl">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {/* Destination Input */}
-              <div className="md:col-span-2 space-y-2">
-                <label
-                  htmlFor="destination"
-                  className="text-sm font-medium text-foreground flex items-center gap-2"
-                >
-                  <MapPin className="w-4 h-4 text-primary" />
-                  Where to?
-                </label>
-                <Input
-                  id="destination"
-                  type="text"
-                  placeholder="Search destinations..."
-                  value={destination}
-                  onChange={(e) => setDestination(e.target.value)}
-                  className="h-12 text-base"
-                />
-              </div>
-
-              {/* Date Picker */}
-              <div className="space-y-2">
-                <label
-                  htmlFor="dates"
-                  className="text-sm font-medium text-foreground flex items-center gap-2"
-                >
-                  <Calendar className="w-4 h-4 text-primary" />
-                  When?
-                </label>
-                <Input id="dates" type="date" className="h-12 text-base" />
-              </div>
-
-              {/* Guests Selector */}
-              <div className="space-y-2">
-                <label
-                  htmlFor="guests"
-                  className="text-sm font-medium text-foreground flex items-center gap-2"
-                >
-                  <Users className="w-4 h-4 text-primary" />
-                  Guests
-                </label>
-                <Select value={guests} onValueChange={setGuests}>
-                  <SelectTrigger id="guests" className="h-12 text-base">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">1 Guest</SelectItem>
-                    <SelectItem value="2">2 Guests</SelectItem>
-                    <SelectItem value="3">3 Guests</SelectItem>
-                    <SelectItem value="4">4 Guests</SelectItem>
-                    <SelectItem value="5">5+ Guests</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {/* Search Button */}
-            <Button size="lg">
-              <Search className="w-5 h-5 mr-2" />
-              Solicitar cotação
-            </Button>
-          </Card>
-
-          {/* Quick Stats */}
-        </div>
+    <section className="relative min-h-[650px] flex items-start justify-center overflow-visible mt-8">
+      {/* Background: fixed height so it doesn't grow when the card expands */}
+      <div className="absolute inset-x-0 top-0 h-[767px] z-0 overflow-hidden">
+        <Image
+          src={TropicalImage}
+          alt="Tropical paradise destination"
+          className="w-full h-screen object-cover"
+          // sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/40" />
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
-        <div className="w-6 h-10 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
-          <div className="w-1 h-3 bg-white/70 rounded-full" />
+      {/* Content */}
+      {/* Content: align to top so the heading remains stable when card height changes */}
+      <div className="relative z-10 px-4 pt-14 pb-8 w-full">
+        <div className="max-w-6xl mx-auto text-center space-y-8">
+          <Wrapper className="p-0">
+            <div className="flex flex-col items-center justify-center w-full z-10">
+              <Container>
+                <div className="flex items-center justify-center gap-x-1 px-3 py-1.5 relative w-max mx-auto rounded-full before:absolute before:inset-0 before:-z-10 before:p-[1px] before:rounded-3xl before:bg-gradient-to-b before:from-black/75 before:to-black/5 before:content-[''] after:absolute after:inset-[1px] after:-z-10 after:rounded-[22px] after:bg-[#141414]/55">
+                  <Icons.stars className="size-5" />
+                  <span className="text-sm text-white">
+                    Cotação personalizada de passagens
+                  </span>
+                </div>
+              </Container>
+
+              <Container delay={0.1}>
+                <h2 className="text-balance !leading-[1.25] text-center text-4xl md:text-6xl font-semibold tracking-tight mt-6 w-full">
+                  Nós cuidamos da sua cotação aérea do primeiro clique à emissão
+                </h2>
+              </Container>
+
+              <Container delay={0.2}>
+                <p className="text-base md:text-lg font-normal text-center text-balance text-muted-foreground max-w-3xl mx-auto mt-4">
+                  Envie seus detalhes de viagem, deixe nossos especialistas
+                  analisar rotas, negociar tarifas com companhias aéreas e
+                  retornar com as melhores opções para você ou seu time.
+                </p>
+              </Container>
+            </div>
+          </Wrapper>
+          {/* Search Card */}
+          <Container delay={0.3}>
+            <Card className="bg-black/75 relative backdrop-blur-sm p-6 md:p-8 shadow-2xl">
+              <Tabs
+                value={tripType}
+                onValueChange={setTripType}
+                className="w-full"
+              >
+                <TabsList className="mb-6 grid w-auto max-w-xs grid-cols-2 bg-white/10 backdrop-blur-sm ring-1 ring-white/10">
+                  <TabsTrigger value="roundtrip">Ida e volta</TabsTrigger>
+                  <TabsTrigger value="oneway">Só ida</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value={tripType} className="space-y-6">
+                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="origin" className="text-sm font-medium">
+                        Origem
+                      </Label>
+                      <div className="relative">
+                        <MapPinIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                        <Input
+                          id="origin"
+                          placeholder="São Paulo (GRU)"
+                          className="pl-10"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="destination"
+                        className="text-sm font-medium"
+                      >
+                        Destino
+                      </Label>
+                      <div className="relative">
+                        <MapPinIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                        <Input
+                          id="destination"
+                          placeholder="Rio de Janeiro (GIG)"
+                          className="pl-10"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="departure"
+                        className="text-sm font-medium"
+                      >
+                        Ida
+                      </Label>
+                      <div className="relative">
+                        <CalendarIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                        <Input id="departure" type="date" className="pl-10" />
+                      </div>
+                    </div>
+
+                    {tripType === "roundtrip" && (
+                      <div className="space-y-2">
+                        <Label htmlFor="return" className="text-sm font-medium">
+                          Volta
+                        </Label>
+                        <div className="relative">
+                          <CalendarIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                          <Input id="return" type="date" className="pl-10" />
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="passengers"
+                        className="text-sm font-medium"
+                      >
+                        Passageiros
+                      </Label>
+                      <div className="relative">
+                        <UsersIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                        <Input
+                          id="passengers"
+                          type="number"
+                          min="1"
+                          defaultValue="1"
+                          className="pl-10"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+
+              {/* Search Button */}
+              <Button size="lg">
+                <Search className="w-5 h-5 mr-2" />
+                Solicitar cotação
+              </Button>
+            </Card>
+          </Container>
         </div>
       </div>
     </section>

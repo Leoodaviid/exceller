@@ -8,7 +8,8 @@ import { Button } from "../ui/button";
 const CTA = () => {
   return (
     <div className="flex flex-col items-center justify-center relative w-full py-16 lg:py-24 overflow-hidden">
-      <div className="absolute bottom-0 lg:bottom-0 inset-x-0 mx-auto bg-primary/40 lg:bg-primary/60 rounded-full w-1/3 h-1/16 blur-[4rem]"></div>
+      <div className="absolute top-0 -right-1/3 -z-10 ml-auto w-4/5 h-32 lg:h-48 rounded-full blur-[5rem] bg-[radial-gradient(86.02%_172.05%_at_50%_-40%,rgba(212,175,55,0.6)_0%,rgba(5,5,5,0)_80%)]"></div>
+      {/* <div className="absolute bottom-0 -left-1/3 -z-10 ml-auto w-4/5 h-32 lg:h-48 rounded-full blur-[5rem] bg-[radial-gradient(86.02%_172.05%_at_50%_-40%,rgba(212,175,55,0.6)_0%,rgba(5,5,5,0)_80%)]"></div> */}
 
       <Wrapper>
         <div className="grid grid-cols-1 lg:grid-cols-2 w-full py-8 gap-6">

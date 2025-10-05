@@ -5,6 +5,7 @@ import Image from "next/image";
 import Container from "../global/container";
 import { Button } from "../ui/button";
 import { CheckCircle2Icon } from "lucide-react";
+import AboutHeroImage from "../../../public/images/about-hero.png";
 
 const AboutHero = () => {
   return (
@@ -15,7 +16,7 @@ const AboutHero = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
           <div className="flex flex-col w-full z-10">
             <Container>
-              <div className="flex items-center justify-center gap-x-1 px-2 py-1.5 relative w-max mx-auto md:mx-0 rounded-full before:absolute before:inset-0 before:-z-10 before:p-[1px] before:rounded-3xl before:bg-gradient-to-b before:from-[#b8941f] before:to-transparent before:content-[''] after:absolute after:inset-[1px] after:-z-10 after:rounded-[22px] after:bg-[#141414]/70">
+              <div className="flex items-center justify-center gap-x-1 px-3 py-1.5 relative w-max mx-auto md:mx-0 rounded-full before:absolute before:inset-0 before:-z-10 before:p-[1px] before:rounded-3xl before:bg-gradient-to-b before:from-neutral-700 before:to-neutral-900 before:content-[''] after:absolute after:inset-[1px] after:-z-10 after:rounded-[22px] after:bg-[#141414]/70">
                 <Icons.stars className="size-5" />
                 <span className="text-sm text-white">Exceller Agency</span>
               </div>
@@ -63,9 +64,8 @@ const AboutHero = () => {
           <Container className="w-full z-30">
             <div className="">
               <Image
-                src="/images/about/hero.svg"
-                alt="Equipe da Exceller Agency"
-                priority
+                src={AboutHeroImage}
+                alt="Exceller Agency - Conheça quem conecta milhares de viajantes todos os dias"
                 width={2932}
                 height={1664}
                 loading="eager"
