@@ -43,3 +43,12 @@ next-env.d.ts
 /generated/prisma
 
 /docs
+
+/instructions
+
+.trigger
+
+/prisma/seeds/
+/prisma/data/
+
+/scripts/
