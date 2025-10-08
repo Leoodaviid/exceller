@@ -119,11 +119,9 @@ export const AirportCombobox = ({
                   }}
                 >
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium">
-                      {airport.city} ({airport.iataCode})
-                    </span>
+                    <span className="text-sm font-medium">{airport.label}</span>
                     <span className="text-xs text-muted-foreground">
-                      {airport.name} - {airport.state}
+                      {airport.name}
                     </span>
                   </div>
                 </CommandItem>
