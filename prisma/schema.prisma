@@ -21,6 +21,44 @@ enum UserRole {
   @@map("UserRole")
 }
 
+enum TripType {
+  ONE_WAY
+  ROUND_TRIP
+
+  @@map("TripType")
+}
+
+enum QuotationStatus {
+  PENDING
+  IN_PROGRESS
+  RESPONDED
+  AWAITING_PAYMENT
+  PAID
+  COMPLETED
+  CANCELED
+
+  @@map("QuotationStatus")
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  BANK_TRANSFER
+  BOLETO
+  OTHER
+
+  @@map("PaymentMethod")
+}
+
+enum PaymentStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+  REFUNDED
+
+  @@map("PaymentStatus")
+}
+
 model User {
   id             String    @id @default(cuid())
   name           String
@@ -33,6 +71,7 @@ model User {
   updatedAt      DateTime  @updatedAt
   sessions       Session[]
   accounts       Account[]
+  assignedQuotations Quotation[] @relation("AssignedQuotations")
 
   @@map("User")
 }
@@ -84,4 +123,87 @@ model PasswordResetToken {
 
   @@unique([identifier, token])
   @@map("PasswordResetToken")
+}
+
+model Airport {
+  id          String      @id @default(cuid())
+  iataCode    String      @unique
+  name        String
+  city        String
+  state       String
+  country     String      @default("Brasil")
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  quotationsOrigin      Quotation[] @relation("OriginAirport")
+  quotationsDestination Quotation[] @relation("DestinationAirport")
+
+  @@map("Airport")
+}
+
+model Quotation {
+  id             String           @id @default(cuid())
+  protocol       String           @unique
+
+  clientName     String
+  clientEmail    String
+  clientPhone    String
+  clientCPF      String
+  company        String?
+
+  originId       String
+  origin         Airport          @relation("OriginAirport", fields: [originId], references: [id])
+  destinationId  String
+  destination    Airport          @relation("DestinationAirport", fields: [destinationId], references: [id])
+  tripType       TripType
+  departureDate  DateTime
+  returnDate     DateTime?
+  adultsCount    Int
+  childrenCount  Int              @default(0)
+  infantsCount   Int              @default(0)
+  cabinClass     String?
+  observations   String?
+
+  status         QuotationStatus  @default(PENDING)
+  assignedToId   String?
+  assignedTo     User?            @relation("AssignedQuotations", fields: [assignedToId], references: [id])
+
+  responseNotes  String?
+  adultPrice     Decimal?         @db.Decimal(10, 2)
+  childPrice     Decimal?         @db.Decimal(10, 2)
+  infantPrice    Decimal?         @db.Decimal(10, 2)
+  additionalFees Decimal?         @db.Decimal(10, 2)
+  totalPrice     Decimal?         @db.Decimal(10, 2)
+  conditions     String?
+  validUntil     DateTime?
+
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  payments       Payment[]
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("Quotation")
+}
+
+model Payment {
+  id                   String         @id @default(cuid())
+  quotationId          String
+  quotation            Quotation      @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  method               PaymentMethod
+  status               PaymentStatus  @default(PENDING)
+  amount               Decimal        @db.Decimal(10, 2)
+  paidAt               DateTime?
+  receiptUrl           String?
+  installments         Int?
+  transactionReference String?
+  notes                String?
+
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+
+  @@index([quotationId])
+  @@map("Payment")
 }
