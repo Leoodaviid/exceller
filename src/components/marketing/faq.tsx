@@ -9,6 +9,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import FaqImage from "../../../public/images/faq.svg";
 
 const Faq = () => {
   return (
@@ -50,7 +51,7 @@ const Faq = () => {
             <div className="col-span-1 w-full z-10">
               <div className="flex w-full">
                 <Image
-                  src="/images/faq.svg"
+                  src={FaqImage}
                   alt="Box"
                   width={1024}
                   height={1024}

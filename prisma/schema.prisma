@@ -126,19 +126,43 @@ model PasswordResetToken {
 }
 
 model Airport {
-  id          String      @id @default(cuid())
-  iataCode    String      @unique
+  id          String   @id @default(cuid())
+
+  // IATA nem sempre existe. Muita entrada vem como \N. Deixe opcional e crie um índice condicional.
+  iataCode    String?  @unique(map: "Airport_iata_unique")
+  // ICAO ajuda MUITO quando IATA falta
+  icaoCode    String?  @db.VarChar(4)
+
   name        String
   city        String
-  state       String
-  country     String      @default("Brasil")
-  isActive    Boolean     @default(true)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  state       String?  // nem sempre disponível no OpenFlights (para BR você pode enriquecer depois)
+  country     String    // <-- remova o default "Brasil" para globalizar
+  countryIso2 String?   // se quiser enriquecer (não vem no arquivo; dá p/ mapear mais tarde)
+  isActive    Boolean   @default(true)
+
+  // Geo e fuso
+  latitude    Decimal? @db.Decimal(10,6)
+  longitude   Decimal? @db.Decimal(10,6)
+  elevationM  Int?     // convertido de pés p/ metros
+  tzDatabase  String?  // ex: "America/Sao_Paulo"
+  utcOffset   Float?   // ex: -3.0
+  dstRule     String?  // ex: "S" (Seasonal) — pouco usado, mas mantemos
+
+  // Metadados
+  kind        String?  // ex: "airport" (do campo Type)
+  source      String?  // ex: "OurAirports", etc.
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   quotationsOrigin      Quotation[] @relation("OriginAirport")
   quotationsDestination Quotation[] @relation("DestinationAirport")
 
+  @@index([country, city, name], map: "Airport_country_city_name_idx")
+  @@index([name], map: "Airport_name_idx")
+  @@index([city], map: "Airport_city_idx")
+  @@index([iataCode], map: "Airport_iata_idx")
+  @@index([icaoCode], map: "Airport_icao_idx")
   @@map("Airport")
 }
 

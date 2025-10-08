@@ -60,16 +60,17 @@ const IntegrationsHero = () => {
             </Container>
           </div>
 
-          <Container className="w-full z-30 flex items-center justify-center rounded-full">
-            <div className="w-[80%] h-[88%] bg-white/10 shadow-md rounded-full flex items-center justify-center">
+          <Container className="w-full z-30 flex items-center justify-center">
+            <div className="aspect-square w-11/12 sm:w-10/12 md:w-9/12 lg:w-[70%] bg-white/10 shadow-md rounded-full flex items-center justify-center overflow-hidden">
               <Image
                 src={Integrations}
                 alt="Integrações Exceller"
                 priority
-                width={2932}
-                height={1664}
+                width={0}
+                height={0}
                 loading="eager"
-                className="w-full object-cover rounded-full h-[90%] pl-6 pt-3"
+                sizes="100vw"
+                className="w-full h-full object-contain pt-4 px-6"
               />
             </div>
           </Container>

@@ -5,8 +5,18 @@ import { SessionProvider } from "next-auth/react";
 import { cn } from "@/lib";
 import "@/styles/globals.css";
 import { generateMetadata } from "@/utils";
+import { Viewport } from "next";
 
 export const metadata = generateMetadata();
+
+export const viewport: Viewport = {
+  width: "device-width",
+  themeColor: "#b8941f",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+};
 
 export default async function RootLayout({
   children,
