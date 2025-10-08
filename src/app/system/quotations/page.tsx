@@ -1,102 +1,116 @@
 import { prisma } from "@/services/prisma";
+import { Prisma, QuotationStatus } from "@generated/prisma";
+import { QuotationFilters } from "@/components/admin/quotation-filters";
+import { QuotationsTable, SerializableQuotation } from "@/components/admin/quotations-table";
 
-const formatDateTime = (date: Date) =>
-  new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(date);
+async function getQuotations(search?: string, status?: string) {
+  const where: Prisma.QuotationWhereInput = {};
 
-const statusLabels: Record<string, string> = {
-  PENDING: "Pendente",
-  IN_PROGRESS: "Em análise",
-  RESPONDED: "Respondida",
-  AWAITING_PAYMENT: "Aguardando pagamento",
-  PAID: "Paga",
-  COMPLETED: "Concluída",
-  CANCELED: "Cancelada",
-};
+  if (status && status !== "ALL") {
+    const statusValue = status as keyof typeof QuotationStatus;
+    if (QuotationStatus[statusValue]) {
+      where.status = QuotationStatus[statusValue];
+    }
+  }
 
-async function getQuotations() {
+  if (search) {
+    where.OR = [
+      { clientName: { contains: search, mode: "insensitive" } },
+      { clientEmail: { contains: search, mode: "insensitive" } },
+      { protocol: { contains: search, mode: "insensitive" } },
+    ];
+  }
+
   return prisma.quotation.findMany({
-    orderBy: { createdAt: "desc" },
+    where,
     include: {
       origin: true,
       destination: true,
+      assignedTo: {
+        select: {
+          name: true,
+          email: true,
+        },
+      },
     },
-    take: 25,
+    orderBy: { createdAt: "desc" },
+    take: 100,
   });
 }
 
-const QuotationsPage = async () => {
-  const quotations = await getQuotations();
+export default async function QuotationsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string; status?: string }>;
+}) {
+  const params = await searchParams;
+  const search = params?.search ?? "";
+  const status = params?.status ?? "ALL";
+
+  const quotations = await getQuotations(search, status);
+
+  const serializableQuotations: SerializableQuotation[] = quotations.map(
+    (quotation) => ({
+      id: quotation.id,
+      protocol: quotation.protocol,
+      clientName: quotation.clientName,
+      clientEmail: quotation.clientEmail,
+      clientPhone: quotation.clientPhone,
+      clientCPF: quotation.clientCPF,
+      company: quotation.company ?? null,
+      tripType: quotation.tripType,
+      departureDate: quotation.departureDate.toISOString(),
+      returnDate: quotation.returnDate?.toISOString() ?? null,
+      adultsCount: quotation.adultsCount,
+      childrenCount: quotation.childrenCount,
+      infantsCount: quotation.infantsCount,
+      cabinClass: quotation.cabinClass ?? null,
+      observations: quotation.observations ?? null,
+      status: quotation.status,
+      responseNotes: quotation.responseNotes ?? null,
+      adultPrice: quotation.adultPrice?.toNumber() ?? null,
+      childPrice: quotation.childPrice?.toNumber() ?? null,
+      infantPrice: quotation.infantPrice?.toNumber() ?? null,
+      additionalFees: quotation.additionalFees?.toNumber() ?? null,
+      totalPrice: quotation.totalPrice?.toNumber() ?? null,
+      conditions: quotation.conditions ?? null,
+      validUntil: quotation.validUntil?.toISOString() ?? null,
+      createdAt: quotation.createdAt.toISOString(),
+      updatedAt: quotation.updatedAt.toISOString(),
+      origin: {
+        city: quotation.origin.city,
+        iataCode: quotation.origin.iataCode,
+        name: quotation.origin.name,
+        state: quotation.origin.state,
+      },
+      destination: {
+        city: quotation.destination.city,
+        iataCode: quotation.destination.iataCode,
+        name: quotation.destination.name,
+        state: quotation.destination.state,
+      },
+      assignedTo: quotation.assignedTo
+        ? {
+            name: quotation.assignedTo.name,
+            email: quotation.assignedTo.email,
+          }
+        : null,
+    })
+  );
 
   return (
-    <section className="px-6 py-10">
-      <div className="max-w-6xl mx-auto space-y-6">
-        <div>
-          <h1 className="text-2xl font-semibold">Cotações recentes</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Visão rápida das últimas solicitações recebidas via site institucional.
-          </p>
-        </div>
+    <div className="mx-auto flex w-full flex-col gap-6 px-4 pb-12">
+      <header className="space-y-2">
+        <h1 className="text-3xl font-semibold tracking-tight">Cotações</h1>
+        <p className="text-sm text-muted-foreground">
+          Gerencie solicitações recebidas, filtre por status e organize o fluxo
+          de resposta.
+        </p>
+      </header>
 
-        <div className="overflow-x-auto rounded-xl border border-border/60 bg-[#0d0d0f]">
-          <table className="min-w-full divide-y divide-border/50 text-sm">
-            <thead className="bg-[#101014] text-left uppercase text-xs tracking-wide text-muted-foreground">
-              <tr>
-                <th className="px-4 py-3">Protocolo</th>
-                <th className="px-4 py-3">Cliente</th>
-                <th className="px-4 py-3">Rota</th>
-                <th className="px-4 py-3">Embarque</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Criada em</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border/40">
-              {quotations.map((quotation) => {
-                const outbound = `${quotation.origin.city} (${quotation.origin.iataCode}) → ${quotation.destination.city} (${quotation.destination.iataCode})`;
-                const departure = formatDateTime(quotation.departureDate);
-                const status = statusLabels[quotation.status] ?? quotation.status;
+      <QuotationFilters status={status} search={search} />
 
-                return (
-                  <tr key={quotation.id} className="hover:bg-white/5 transition-colors">
-                    <td className="px-4 py-3 font-medium">{quotation.protocol}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-col">
-                        <span>{quotation.clientName}</span>
-                        <span className="text-xs text-muted-foreground">{quotation.clientEmail}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">{outbound}</td>
-                    <td className="px-4 py-3">{departure}</td>
-                    <td className="px-4 py-3">
-                      <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-wide">
-                        {status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-xs text-muted-foreground">
-                      {formatDateTime(quotation.createdAt)}
-                    </td>
-                  </tr>
-                );
-              })}
-
-              {quotations.length === 0 && (
-                <tr>
-                  <td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">
-                    Nenhuma cotação recebida até o momento.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+      <QuotationsTable quotations={serializableQuotations} />
+    </div>
   );
-};
-
-export default QuotationsPage;
+}

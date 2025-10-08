@@ -19,7 +19,8 @@ export const QuotationSchema = z
       .string()
       .trim()
       .min(11, { message: "CPF inválido." })
-      .max(14, { message: "CPF inválido." }),
+      .max(14, { message: "CPF inválido." })
+      .optional(),
     company: z.string().trim().optional(),
     originId: z.string().cuid({ message: "Selecione o aeroporto de origem." }),
     destinationId: z
@@ -47,11 +48,13 @@ export const QuotationSchema = z
     children: z.coerce
       .number({ invalid_type_error: "Informe a quantidade de crianças." })
       .min(0)
-      .max(9, { message: "Limite de 9 crianças." }),
+      .max(9, { message: "Limite de 9 crianças." })
+      .optional(),
     infants: z.coerce
       .number({ invalid_type_error: "Informe a quantidade de bebês." })
       .min(0)
-      .max(9, { message: "Limite de 9 bebês." }),
+      .max(9, { message: "Limite de 9 bebês." })
+      .optional(),
     cabinClass: z.string().trim().optional(),
     observations: z.string().trim().max(1000, { message: "Máximo de 1000 caracteres." }).optional(),
   })
@@ -87,15 +90,9 @@ export const QuotationSchema = z
           message: "Volta deve ser após a ida.",
         });
       }
-    } else if (data.tripType === "ONE_WAY" && data.returnDate) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["returnDate"],
-        message: "Remova a data de retorno para viagem só de ida.",
-      });
     }
 
-    if (data.infants > data.adults) {
+    if (data.infants && data.infants > data.adults) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["infants"],

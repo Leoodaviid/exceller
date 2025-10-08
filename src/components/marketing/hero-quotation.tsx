@@ -11,7 +11,7 @@ import { QuotationForm } from "@/components/quotation/quotation-form";
 export function HeroQuotation() {
   return (
     <section className="relative min-h-[650px] flex items-start justify-center overflow-visible mt-8">
-      <div className="absolute inset-x-0 top-0 h-[767px] z-0 overflow-hidden">
+      <div className="absolute inset-x-0 top-0 h-screen z-0 overflow-hidden">
         <Image
           src={TropicalImage}
           alt="Tropical paradise destination"
@@ -50,7 +50,7 @@ export function HeroQuotation() {
           </Wrapper>
 
           <Container delay={0.3}>
-            <Card className="bg-black/75 relative backdrop-blur-sm p-6 md:p-8 shadow-2xl">
+            <Card className="bg-black/65 relative backdrop-blur-sm p-6 md:p-8 shadow-2xl">
               <QuotationForm className="space-y-6" />
             </Card>
           </Container>

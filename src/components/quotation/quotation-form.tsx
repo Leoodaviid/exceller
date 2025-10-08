@@ -16,7 +16,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { AirportCombobox, AirportSelection } from "./airport-combobox";
 import { toast } from "sonner";
 import { cn } from "@/lib";
@@ -25,6 +24,7 @@ import "cleave.js/dist/addons/cleave-phone.br";
 import FormError from "@/components/auth/form-error";
 import FormSuccess from "@/components/auth/form-success";
 import { Loader2 } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const DEFAULT_VALUES: QuotationFormInput = {
   fullName: "",
@@ -36,7 +36,7 @@ const DEFAULT_VALUES: QuotationFormInput = {
   destinationId: "",
   tripType: "ROUND_TRIP",
   departureDate: "",
-  returnDate: "",
+  returnDate: undefined,
   adults: 1,
   children: 0,
   infants: 0,
@@ -82,7 +82,10 @@ export const QuotationForm = ({ className, onSuccess }: QuotationFormProps) => {
 
   useEffect(() => {
     if (tripType === "ONE_WAY") {
-      form.setValue("returnDate", "", { shouldValidate: false, shouldDirty: false });
+      form.setValue("returnDate", undefined, {
+        shouldValidate: false,
+        shouldDirty: false,
+      });
       form.clearErrors("returnDate");
     }
   }, [tripType, form]);
@@ -104,6 +107,11 @@ export const QuotationForm = ({ className, onSuccess }: QuotationFormProps) => {
         });
       }
     });
+  };
+
+  const onInvalid = (errors: any) => {
+    console.error("Formulário inválido. Erros:", errors);
+    // Opcional: toast.error("Preencha todos os campos obrigatórios.");
   };
 
   const onSubmit = (values: QuotationFormInput) => {
@@ -145,7 +153,7 @@ export const QuotationForm = ({ className, onSuccess }: QuotationFormProps) => {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit, onInvalid)}
         className={cn("space-y-8", className)}
       >
         <div className="space-y-3">
@@ -154,6 +162,139 @@ export const QuotationForm = ({ className, onSuccess }: QuotationFormProps) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="originId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Origem*</FormLabel>
+                <FormControl>
+                  <AirportCombobox
+                    disabled={isPending}
+                    value={originSelection}
+                    placeholder="Selecione o aeroporto de origem"
+                    onSelect={(airport) => {
+                      setOriginSelection({
+                        id: airport.id,
+                        label: `${airport.city} (${airport.iataCode})`,
+                      });
+                      field.onChange(airport.id);
+                      form.clearErrors("originId");
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="destinationId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Destino*</FormLabel>
+                <FormControl>
+                  <AirportCombobox
+                    disabled={isPending}
+                    value={destinationSelection}
+                    placeholder="Selecione o aeroporto de destino"
+                    onSelect={(airport) => {
+                      setDestinationSelection({
+                        id: airport.id,
+                        label: `${airport.city} (${airport.iataCode})`,
+                      });
+                      field.onChange(airport.id);
+                      form.clearErrors("destinationId");
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <Tabs
+          value={tripType}
+          onValueChange={(value) =>
+            form.setValue("tripType", value as "ROUND_TRIP" | "ONE_WAY")
+          }
+          className="w-full"
+        >
+          <TabsList className="grid w-full grid-cols-2">
+            {tripTypeOptions.map((option) => (
+              <TabsTrigger
+                key={option.value}
+                value={option.value}
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              >
+                {option.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          <TabsContent value="ROUND_TRIP" className="mt-4 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="departureDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Data de saída*</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="date"
+                        value={(field.value as string) ?? ""}
+                        onChange={field.onChange}
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="returnDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Data de retorno*</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="date"
+                        value={(field.value as string) ?? ""}
+                        onChange={field.onChange}
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </TabsContent>
+          <TabsContent value="ONE_WAY" className="mt-4 space-y-6">
+            <FormField
+              control={form.control}
+              name="departureDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Data de saída*</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="date"
+                      value={(field.value as string) ?? ""}
+                      onChange={field.onChange}
+                      disabled={isPending}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </TabsContent>
+        </Tabs>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <FormField
             control={form.control}
             name="fullName"
@@ -211,169 +352,6 @@ export const QuotationForm = ({ className, onSuccess }: QuotationFormProps) => {
                     autoComplete="tel"
                     placeholder="+55 11 91234-5678"
                     className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="cpf"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>CPF*</FormLabel>
-                <FormControl>
-                  <Cleave
-                    {...field}
-                    options={{
-                      blocks: [3, 3, 3, 2],
-                      delimiters: [".", ".", "-"],
-                      numericOnly: true,
-                    }}
-                    disabled={isPending}
-                    placeholder="000.000.000-00"
-                    className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="company"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Empresa</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    disabled={isPending}
-                    placeholder="Nome da empresa"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField
-            control={form.control}
-            name="originId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Origem*</FormLabel>
-                <FormControl>
-                  <AirportCombobox
-                    disabled={isPending}
-                    value={originSelection}
-                    placeholder="Selecione o aeroporto de origem"
-                    onSelect={(airport) => {
-                      setOriginSelection({
-                        id: airport.id,
-                        label: `${airport.city} (${airport.iataCode})`,
-                      });
-                      field.onChange(airport.id);
-                      form.clearErrors("originId");
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="destinationId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Destino*</FormLabel>
-                <FormControl>
-                  <AirportCombobox
-                    disabled={isPending}
-                    value={destinationSelection}
-                    placeholder="Selecione o aeroporto de destino"
-                    onSelect={(airport) => {
-                      setDestinationSelection({
-                        id: airport.id,
-                        label: `${airport.city} (${airport.iataCode})`,
-                      });
-                      field.onChange(airport.id);
-                      form.clearErrors("destinationId");
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <FormField
-          control={form.control}
-          name="tripType"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tipo de viagem</FormLabel>
-              <FormControl>
-                <ToggleGroup
-                  type="single"
-                  value={field.value}
-                  onValueChange={(value) => value && field.onChange(value)}
-                  className="w-full md:w-auto"
-                >
-                  {tripTypeOptions.map((option) => (
-                    <ToggleGroupItem
-                      key={option.value}
-                      value={option.value}
-                      className="px-6 py-2"
-                    >
-                      {option.label}
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField
-            control={form.control}
-            name="departureDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Data de saída*</FormLabel>
-                <FormControl>
-                  <Input
-                    type="date"
-                    value={(field.value as string) ?? ""}
-                    onChange={field.onChange}
-                    disabled={isPending}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="returnDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Data de retorno{tripType === "ROUND_TRIP" ? "*" : ""}
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    type="date"
-                    value={(field.value as string) ?? ""}
-                    onChange={field.onChange}
-                    disabled={isPending || tripType === "ONE_WAY"}
                   />
                 </FormControl>
                 <FormMessage />

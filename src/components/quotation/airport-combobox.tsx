@@ -10,7 +10,11 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { ChevronsUpDown, Loader2, PlaneTakeoff } from "lucide-react";
 import { cn } from "@/lib";
@@ -81,7 +85,7 @@ export const AirportCombobox = ({
           aria-expanded={open}
           disabled={disabled}
           className={cn(
-            "w-full justify-between font-normal",
+            "w-full justify-between font-normal rounded-md",
             !value && "text-muted-foreground"
           )}
         >

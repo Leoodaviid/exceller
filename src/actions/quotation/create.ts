@@ -61,7 +61,7 @@ export const createQuotation = async (values: QuotationFormInput) => {
       clientName: data.fullName,
       clientEmail: data.email,
       clientPhone: data.phone,
-      clientCPF: data.cpf,
+      clientCPF: data.cpf || "",
       company: data.company,
       originId: data.originId,
       destinationId: data.destinationId,
