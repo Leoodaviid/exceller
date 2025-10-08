@@ -15,12 +15,15 @@ export const QuotationSchema = z
       .trim()
       .min(10, { message: "Telefone inválido." })
       .max(20, { message: "Telefone inválido." }),
-    cpf: z
+       cpf: z
       .string()
       .trim()
-      .min(11, { message: "CPF inválido." })
-      .max(14, { message: "CPF inválido." })
-      .optional(),
+      .optional()
+      .refine(
+        (val) =>
+          !val || /^(\d{3}\.?\d{3}\.?\d{3}\-?\d{2})$/.test(val.replace(/\D/g, "")),
+        { message: "CPF inválido." }
+      ),
     company: z.string().trim().optional(),
     originId: z.string().cuid({ message: "Selecione o aeroporto de origem." }),
     destinationId: z
