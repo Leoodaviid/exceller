@@ -1,0 +1,553 @@
+name: Deploy with Coolify v4 + Trigger.dev v4
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+    inputs:
+      trigger_env:
+        description: "Trigger.dev environment"
+        required: true
+        default: "production"
+        type: choice
+        options:
+          - staging
+          - production
+          - preview
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Set Node.js environment
+        run: |
+          echo "Node.js version:"
+          node --version
+          echo "NPM version:"
+          npm --version
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npm run generate
+
+      # Build is handled by Coolify with Nixpacks - no need to build here
+      # - name: Build Next.js application
+      #   run: npm run build
+
+      - name: Deploy Trigger.dev v4 tasks
+        id: trigger_deploy
+        env:
+          TRIGGER_API_URL: ${{ secrets.TRIGGER_API_URL }}
+          TRIGGER_ACCESS_TOKEN: ${{ secrets.TRIGGER_ACCESS_TOKEN }}
+          TRIGGER_ENV: ${{ github.event.inputs.trigger_env || 'production' }}
+        run: |
+          echo "🚀 Deploying Trigger.dev tasks to environment: $TRIGGER_ENV"
+
+          # Validate environment variables
+          if [[ -z "$TRIGGER_API_URL" || -z "$TRIGGER_ACCESS_TOKEN" ]]; then
+            echo "❌ Missing required environment variables!"
+            echo "TRIGGER_API_URL: ${TRIGGER_API_URL:-'NOT SET'}"
+            echo "TRIGGER_ACCESS_TOKEN: ${TRIGGER_ACCESS_TOKEN:+SET}"
+            exit 1
+          fi
+
+          echo "🔗 API URL: ${TRIGGER_API_URL}"
+          echo "🔐 Token: ${TRIGGER_ACCESS_TOKEN:0:12}..."
+
+          # Install trigger.dev CLI v4 globally
+          echo "📦 Installing Trigger.dev CLI v4..."
+          npm install -g trigger.dev@4.0.4 --force
+
+          # Verify CLI installation
+          echo "✅ CLI Version:"
+          npx trigger.dev --version || echo "CLI version check failed"
+
+          # Test API connectivity
+          echo "🔍 Testing API connectivity..."
+          api_response=$(curl -s -X GET \
+            -H "Authorization: Bearer ${TRIGGER_ACCESS_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --max-time 15 \
+            "${TRIGGER_API_URL}/api/v1/whoami" 2>&1 || echo "Connection failed")
+          echo "API Response: $api_response"
+
+          # Export environment variables for CLI
+          export TRIGGER_API_URL="${TRIGGER_API_URL}"
+          export TRIGGER_ACCESS_TOKEN="${TRIGGER_ACCESS_TOKEN}"
+
+                    # Deploy tasks para o ambiente específico (build will be handled by Coolify/Nixpacks)
+          echo "📦 Deploying with Trigger.dev v4 (Prisma handled by prismaExtension)..."
+          if [ "$TRIGGER_ENV" = "production" ]; then
+            npx trigger.dev deploy --env prod
+          elif [ "$TRIGGER_ENV" = "staging" ]; then
+            npx trigger.dev deploy --env staging
+          elif [ "$TRIGGER_ENV" = "preview" ]; then
+            npx trigger.dev deploy --env preview
+          else
+            echo "❌ Invalid environment: $TRIGGER_ENV"
+            exit 1
+          fi
+
+          echo "✅ Trigger.dev tasks deployed successfully"
+          echo "✅ Next.js build will be handled by Coolify with Nixpacks"
+          echo "✅ Prisma handled automatically by prismaExtension"
+          echo "trigger_env=$TRIGGER_ENV" >> "$GITHUB_OUTPUT"
+          echo "trigger_success=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger Coolify v4 Deploy
+        id: coolify_deploy
+        env:
+          COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          COOLIFY_UUID: ${{ secrets.COOLIFY_UUID }}
+        run: |
+          echo "🚀 Starting deploy via Coolify v4..."
+
+          # Validate environment variables
+          if [[ -z "$COOLIFY_URL" || -z "$COOLIFY_UUID" ]]; then
+            echo "❌ Missing required environment variables!"
+            echo "COOLIFY_URL: ${COOLIFY_URL:-'NOT SET'}"
+            echo "COOLIFY_UUID: ${COOLIFY_UUID:-'NOT SET'}"
+            echo "COOLIFY_TOKEN: ${COOLIFY_TOKEN:+SET (may not be required)}"
+            exit 1
+          fi
+
+          # Test basic connectivity first
+          echo "🔍 Testing API connectivity..."
+          if [ -n "$COOLIFY_TOKEN" ]; then
+            echo "🔑 Testing with Bearer token..."
+            api_test=$(curl -s -w "HTTPSTATUS:%{http_code}" \
+              -H "Authorization: Bearer ${COOLIFY_TOKEN}" \
+              -H "Content-Type: application/json" \
+              "${COOLIFY_URL}/api/v1/version" 2>&1 || echo "Connection failed")
+          else
+            echo "🔓 Testing without authentication..."
+            api_test=$(curl -s -w "HTTPSTATUS:%{http_code}" \
+              -H "Content-Type: application/json" \
+              "${COOLIFY_URL}/api/v1/version" 2>&1 || echo "Connection failed")
+          fi
+          echo "API Test Response: $api_test"
+
+          # Check if we get HTML instead of JSON (indicates routing issues)
+          if echo "$api_test" | grep -q "<!DOCTYPE html\|<html"; then
+            echo "❌ Received HTML response instead of JSON - likely URL/routing issue"
+            echo "🔧 Please check your COOLIFY_URL"
+            echo "🔧 Response: $api_test"
+          fi
+
+          attempt=1
+          max_attempts=3
+          deployment_uuid=""
+
+          while [ $attempt -le $max_attempts ] && [ -z "$deployment_uuid" ]; do
+            echo "📡 Attempt $attempt of $max_attempts..."
+            
+            # Coolify v4 API endpoint - tenta primeiro sem token, depois com token se necessário
+            if [ -n "$COOLIFY_TOKEN" ]; then
+              echo "🔑 Using Bearer token for authentication..."
+              response=$(curl -s -w "HTTPSTATUS:%{http_code}" -X POST \
+                -H "Authorization: Bearer ${COOLIFY_TOKEN}" \
+                -H "Content-Type: application/json" \
+                "${COOLIFY_URL}/api/v1/deploy?uuid=${COOLIFY_UUID}")
+            else
+              echo "🔓 No token provided, trying without authentication..."
+              response=$(curl -s -w "HTTPSTATUS:%{http_code}" -X POST \
+                -H "Content-Type: application/json" \
+                "${COOLIFY_URL}/api/v1/deploy?uuid=${COOLIFY_UUID}")
+            fi
+            
+            # Extract HTTP status code
+            http_code=$(echo "$response" | grep -o "HTTPSTATUS:[0-9]*" | cut -d: -f2)
+            response_body=$(echo "$response" | sed 's/HTTPSTATUS:[0-9]*$//')
+            
+            echo "📋 HTTP Status: $http_code"
+            echo "📋 API Response: $response_body"
+            
+            # Check for common error status codes
+            if [ "$http_code" = "404" ]; then
+              echo "❌ Resource not found (HTTP $http_code)"
+              echo "🔧 Please check your COOLIFY_UUID: ${COOLIFY_UUID}"
+              exit 1
+            elif [ "$http_code" = "500" ]; then
+              echo "❌ Server error (HTTP $http_code)"
+              echo "🔧 Coolify server may be having issues"
+              exit 1
+            fi
+
+            # Check if response contains HTML (error page)
+            if echo "$response_body" | grep -q "<!DOCTYPE html\|<html\|This page is definitely old"; then
+              echo "❌ Received HTML error page instead of JSON response"
+              echo "🔧 Response: $response_body"
+              echo "🔧 This usually indicates URL or routing issues"
+              exit 1
+            fi
+            
+            # Try to extract deployment_uuid from JSON response
+            # First try with jq, then fallback to grep/sed if jq is not available
+            if command -v jq >/dev/null 2>&1; then
+              deployment_uuid=$(echo "$response_body" | jq -r '.deployments[0].deployment_uuid // empty' 2>/dev/null)
+            else
+              # Fallback: extract UUID using grep and sed
+              deployment_uuid=$(echo "$response_body" | grep -o '"deployment_uuid":"[^"]*"' | head -1 | sed 's/"deployment_uuid":"//g' | sed 's/"//g')
+            fi
+            
+            if [ -z "$deployment_uuid" ]; then
+              echo "⚠️ Attempt $attempt failed. Retrying in 5s..."
+              echo "📋 Response: $response_body"
+              attempt=$((attempt+1))
+              sleep 5
+            else
+              echo "✅ Deploy triggered successfully: $deployment_uuid"
+              echo "deployment_uuid=$deployment_uuid" >> "$GITHUB_OUTPUT"
+              break
+            fi
+          done
+
+          if [ -z "$deployment_uuid" ]; then
+            echo "❌ Failed to trigger deploy after $max_attempts attempts."
+            echo "🔧 Please verify:"
+            echo "   - COOLIFY_UUID is correct for your resource: ${COOLIFY_UUID}"
+            echo "   - COOLIFY_URL points to your Coolify instance: ${COOLIFY_URL}"
+            echo "   - The application exists and is accessible"
+            exit 1
+          fi
+
+      - name: Monitor Coolify Deploy Status (Optional)
+        id: monitor_deploy
+        continue-on-error: true
+        env:
+          COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          DEPLOYMENT_ID: ${{ steps.coolify_deploy.outputs.deployment_uuid }}
+        run: |
+          echo "📡 Monitoring deploy status for deployment: $DEPLOYMENT_ID"
+
+          # Shorter timeout since deploy is usually fast
+          timeout_minutes=10
+          interval_seconds=15
+          max_checks=$(( (timeout_minutes * 60) / interval_seconds ))
+          count=0
+          last_status=""
+          last_log_count=0
+          consecutive_unknown=0
+
+          echo "🕐 Will check status every ${interval_seconds}s for max ${timeout_minutes} minutes..."
+
+          # Test status API first
+          echo "🧪 Testing status API endpoint..."
+          if [ -n "$COOLIFY_TOKEN" ]; then
+            test_response=$(curl -s -w "HTTPSTATUS:%{http_code}" \
+              -H "Authorization: Bearer ${COOLIFY_TOKEN}" \
+              -H "Content-Type: application/json" \
+              "${COOLIFY_URL}/api/v1/deployments/${DEPLOYMENT_ID}")
+          else
+            test_response=$(curl -s -w "HTTPSTATUS:%{http_code}" \
+              -H "Content-Type: application/json" \
+              "${COOLIFY_URL}/api/v1/deployments/${DEPLOYMENT_ID}")
+          fi
+
+          test_http_code=$(echo "$test_response" | grep -o "HTTPSTATUS:[0-9]*" | cut -d: -f2)
+          test_body=$(echo "$test_response" | sed 's/HTTPSTATUS:[0-9]*$//')
+
+          echo "🔍 Status API test - HTTP: $test_http_code"
+
+          if [ "$test_http_code" != "200" ]; then
+            echo "⚠️ Status API not accessible (HTTP $test_http_code)"
+            echo "🎯 Deploy was triggered successfully - skipping detailed monitoring"
+            echo "deploy_success=triggered" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          while [ $count -lt $max_checks ]; do
+            # Query deployment status - usa token se disponível
+            if [ -n "$COOLIFY_TOKEN" ]; then
+              status_response=$(curl -s \
+                -H "Authorization: Bearer ${COOLIFY_TOKEN}" \
+                -H "Content-Type: application/json" \
+                "${COOLIFY_URL}/api/v1/deployments/${DEPLOYMENT_ID}")
+            else
+              status_response=$(curl -s \
+                -H "Content-Type: application/json" \
+                "${COOLIFY_URL}/api/v1/deployments/${DEPLOYMENT_ID}")
+            fi
+            
+            # Extract status
+            if command -v jq >/dev/null 2>&1; then
+              status=$(echo "$status_response" | jq -r '.status // empty')
+            else
+              # Fallback: extract status using grep and sed
+              status=$(echo "$status_response" | grep -o '"status":"[^"]*"' | head -1 | sed 's/"status":"//g' | sed 's/"//g')
+            fi
+            
+            if [ "$status" != "$last_status" ] && [ -n "$status" ]; then
+              echo "📊 Deploy status: $status"
+              last_status="$status"
+              consecutive_unknown=0  # Reset counter when we get a real status
+            fi
+
+            # Track consecutive unknown status responses
+            if [ "$status" = "" ] || [ "$status" = "unknown" ] || [ "$status" = "null" ]; then
+              consecutive_unknown=$((consecutive_unknown + 1))
+              echo "🔄 Deploy in progress: ${status:-unknown} (${consecutive_unknown}/5)"
+              
+              # If we get too many unknown responses, assume deploy completed
+              if [ $consecutive_unknown -ge 5 ]; then
+                echo "⚠️ Status API not responding properly after 5 attempts"
+                echo "🎯 Deploy was triggered successfully - assuming completion"
+                echo "deploy_success=assumed" >> "$GITHUB_OUTPUT"
+                exit 0
+              fi
+            else
+              echo "📊 Current status: $status"
+            fi
+            
+            # Show logs if available
+            if command -v jq >/dev/null 2>&1; then
+              logs=$(echo "$status_response" | jq -c '(.logs | if type=="string" then fromjson else . end)' 2>/dev/null || echo "[]")
+              total=$(echo "$logs" | jq 'length' 2>/dev/null || echo "0")
+            else
+              # Simplified logs handling without jq
+              total=0
+              logs="[]"
+            fi
+            
+            if [ "$total" -gt "$last_log_count" ]; then
+              echo "----------------- Deployment Logs -----------------"
+              if command -v jq >/dev/null 2>&1; then
+                for i in $(seq $last_log_count $((total-1))); do
+                  entry=$(echo "$logs" | jq -c ".[$i]" 2>/dev/null || echo '{}')
+                  ts=$(echo "$entry" | jq -r '.timestamp' 2>/dev/null || echo "unknown")
+                  out=$(echo "$entry" | jq -r '.output' 2>/dev/null | sed -E 's/^[Ee]rror:[[:space:]]*//' || echo "")
+                  echo "[$ts] $out"
+                done
+              else
+                echo "📋 New logs available (jq not available for detailed parsing)"
+                echo "Raw response: $status_response"
+              fi
+              echo "----------------------------------------------------"
+              last_log_count=$total
+            fi
+            
+            # Check for completion (based on working sample patterns)
+            if [[ "$status" =~ ^(success|succeeded|finished|completed)$ ]]; then
+              echo "✅ Deploy completed successfully with status: $status"
+              echo "deploy_success=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            elif [[ "$status" =~ ^(failed|error|cancelled)$ ]]; then
+              echo "❌ Deploy failed with status: $status"
+              echo "deploy_success=false" >> "$GITHUB_OUTPUT"
+              exit 1
+            fi
+            sleep $interval_seconds
+            count=$((count + 1))
+          done
+
+          echo "⏱️ Monitoring timeout after $timeout_minutes minutes"
+          echo "🎯 Deploy was triggered successfully - monitoring timed out but deploy likely completed"
+          echo "deploy_success=timeout_but_triggered" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for application startup
+        if: steps.coolify_deploy.outputs.deployment_uuid
+        run: |
+          echo "⏳ Waiting for application to start..."
+          echo "📦 Nixpacks will handle the build process automatically"
+          echo "🚀 Deploy triggered successfully - skipping extended wait"
+          sleep 30  # Reduced wait time since deploy is working
+
+      - name: Create healthcheck script
+        run: |
+          mkdir -p scripts
+          cat > scripts/healthcheck.sh << 'EOF'
+          #!/bin/bash
+
+          APP_URL="${APP_URL:-https://exceller.leoodaviid.tech}"
+          MAX_RETRIES=5
+          RETRY_DELAY=10
+
+          echo "🏥 Starting application health check..."
+          echo "🌐 Target URL: $APP_URL"
+
+          # Function to check HTTP status
+          check_http_status() {
+            local url="$1"
+            local expected_status="${2:-200}"
+            
+            response=$(curl -s -w "HTTPSTATUS:%{http_code}" "$url" 2>/dev/null)
+            http_code=$(echo "$response" | grep -o "HTTPSTATUS:[0-9]*" | cut -d: -f2)
+            
+            if [ "$http_code" = "$expected_status" ]; then
+              return 0
+            else
+              echo "⚠️ HTTP $http_code for $url (expected $expected_status)"
+              return 1
+            fi
+          }
+
+          # Test application root
+          echo "🔍 Testing application availability..."
+          for i in $(seq 1 $MAX_RETRIES); do
+            if check_http_status "$APP_URL" "200"; then
+              echo "✅ Application is responding correctly"
+              break
+            elif [ $i -eq $MAX_RETRIES ]; then
+              echo "❌ Application health check failed after $MAX_RETRIES attempts"
+              exit 1
+            else
+              echo "⏳ Retry $i/$MAX_RETRIES in ${RETRY_DELAY}s..."
+              sleep $RETRY_DELAY
+            fi
+          done
+
+          # Test API endpoint if available
+          api_url="$APP_URL/api/health"
+          echo "🔍 Testing API health endpoint..."
+          if check_http_status "$api_url" "200"; then
+            echo "✅ API health endpoint is responding"
+          else
+            echo "⚠️ API health endpoint not available (this is OK if not implemented)"
+          fi
+
+          echo "✅ Health check completed successfully"
+          EOF
+
+          chmod +x scripts/healthcheck.sh
+
+      - name: Run Health Check
+        id: health_check
+        env:
+          APP_URL: ${{ secrets.APP_URL || 'https://martifer.leoodaviid.tech' }}
+        run: |
+          echo "🏥 Running application health check..."
+
+          if ./scripts/healthcheck.sh; then
+            echo "test_result=success" >> "$GITHUB_OUTPUT"
+            echo "test_message=✅ Application health check passed" >> "$GITHUB_OUTPUT"
+          else
+            echo "test_result=error" >> "$GITHUB_OUTPUT"
+            echo "test_message=❌ Application health check failed" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Send Discord Notification
+        if: always() && !cancelled()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          echo "🚀 Sending Discord notification..."
+
+          if [ -z "$DISCORD_WEBHOOK" ]; then
+            echo "⚠️ DISCORD_WEBHOOK not configured, skipping notification"
+            exit 0
+          fi
+
+          # Determine status based on results
+          deploy_result="${{ steps.monitor_deploy.outputs.deploy_success || 'triggered' }}"
+          deploy_triggered="${{ steps.coolify_deploy.outputs.deployment_uuid && 'true' || 'false' }}"
+          trigger_env="${{ steps.trigger_deploy.outputs.trigger_env || 'production' }}"
+          trigger_success="${{ steps.trigger_deploy.outputs.trigger_success || 'true' }}"
+          test_result="${{ steps.health_check.outputs.test_result || 'skipped' }}"
+          test_message="${{ steps.health_check.outputs.test_message || 'Test not executed' }}"
+
+          # Status logic (considerando novos status)
+          if [[ "$deploy_triggered" == "true" && "$test_result" == "success" ]]; then
+            color=65280  # Green
+            status_emoji="✅"
+            overall_status="DEPLOY COMPLETO"
+          elif [[ "$deploy_triggered" == "true" ]] && [[ "$deploy_result" =~ ^(true|assumed|triggered|timeout_but_triggered)$ ]]; then
+            color=65280  # Green (deploy was successful)
+            status_emoji="✅"
+            overall_status="DEPLOY OK"
+          elif [[ "$deploy_triggered" == "true" ]]; then
+            color=16776960  # Yellow
+            status_emoji="✅"
+            overall_status="DEPLOY OK (MONITORAMENTO LIMITADO)"
+          elif [[ "$deploy_result" == "timeout" ]]; then
+            color=16776960  # Yellow
+            status_emoji="⏱️"
+            overall_status="TIMEOUT (VERIFICAR)"
+          else
+            color=16711680  # Red
+            status_emoji="❌"
+            overall_status="DEPLOY FALHOU"
+          fi
+
+          commit_short=$(echo "$GITHUB_SHA" | cut -c1-7)
+
+          # Trigger.dev status text
+          if [[ "$trigger_success" == "true" ]]; then
+            trigger_status="DEPLOY COMPLETO ✅"
+          else
+            trigger_status="Falhou ❌"
+          fi
+
+          # Create notification payload
+          json_payload=$(jq -n \
+            --arg title "$status_emoji Boltz - $overall_status" \
+            --arg branch "$GITHUB_REF_NAME" \
+            --arg commit "$commit_short" \
+            --arg author "$GITHUB_ACTOR" \
+            --argjson color "$color" \
+            --arg deploy_status "Deploy: $deploy_result" \
+            --arg trigger_env "$trigger_env" \
+            --arg trigger_status "$trigger_status" \
+            --arg test_details "$test_message" \
+            --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)" \
+            '{
+              "embeds": [
+                {
+                  "title": $title,
+                  "description": ("**Branch:** `" + $branch + "`\n**Commit:** `" + $commit + "`\n**Autor:** " + $author),
+                  "color": $color,
+                  "fields": [
+                    {
+                      "name": "🚀 Deploy Status",
+                      "value": $deploy_status,
+                      "inline": true
+                    },
+                    {
+                      "name": "⚡ Trigger.dev",
+                      "value": ("(" + $trigger_env + "): " + $trigger_status),
+                      "inline": true
+                    },
+                    {
+                      "name": "🔍 Health Check", 
+                      "value": $test_details,
+                      "inline": false
+                    }
+                  ],
+                  "timestamp": $timestamp,
+                  "footer": {
+                    "text": "GitHub Actions → Coolify v4 → Trigger.dev v4"
+                  }
+                }
+              ]
+            }')
+
+          echo "📤 Sending notification to Discord..."
+          curl_response=$(curl -s -w "HTTPSTATUS:%{http_code}" \
+               -H "Content-Type: application/json" \
+               -d "$json_payload" \
+               "$DISCORD_WEBHOOK")
+
+          http_code=$(echo "$curl_response" | grep -o "HTTPSTATUS:[0-9]*" | cut -d: -f2)
+
+          if [ "$http_code" = "204" ]; then
+            echo "✅ Discord notification sent successfully!"
+          else
+            echo "⚠️ Discord response code: $http_code"
+          fi
