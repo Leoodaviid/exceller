@@ -24,6 +24,11 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QUOTATION_STATUS_META } from "@/constants/quotation-status";
 import { cn } from "@/lib";
+import { FinancialTabContent } from "@/app/system/_components/financial-tab";
+import { AdminTabContent } from "@/app/system/_components/admin-tab-content";
+import { PaymentTabContent } from "@/app/system/_components/payment-tab";
+import { QuotationOverviewTab } from "@/app/system/_components/quotation-overview-tab";
+import { QuotationTripTab } from "@/app/system/_components/quotation-trip-tab";
 
 const formatCurrency = (value: number | null | undefined) => {
   if (value === null || value === undefined) {
@@ -77,15 +82,19 @@ export type SerializableQuotation = {
   updatedAt: string;
   origin: {
     city: string;
-    iataCode: string;
+    iataCode: string | null; // <- agora pode ser null
+    icaoCode: string | null; // <- inclua ICAO como fallback
     name: string;
-    state: string;
+    state: string | null; // <- agora pode ser null
+    country: string; // útil no admin
   };
   destination: {
     city: string;
-    iataCode: string;
+    iataCode: string | null; // <- idem
+    icaoCode: string | null; // <- idem
     name: string;
-    state: string;
+    state: string | null; // <- idem
+    country: string;
   };
   assignedTo: {
     name: string | null;
@@ -201,213 +210,63 @@ export function QuotationsTable({ quotations }: QuotationsTableProps) {
                           defaultValue="overview"
                           className="flex w-full flex-1 flex-col overflow-hidden"
                         >
-                          <TabsList className="grid w-full grid-cols-4 rounded-md border border-border/50 bg-card/80 p-1">
-                            <TabsTrigger
-                              value="overview"
-                              className="rounded-sm px-2 py-1 text-xs text-muted-foreground transition-colors data-[state=active]:bg-background data-[state=active]:text-foreground"
-                            >
-                              Resumo
-                            </TabsTrigger>
-                            <TabsTrigger
-                              value="customer"
-                              className="rounded-sm px-2 py-1 text-xs text-muted-foreground transition-colors data-[state=active]:bg-background data-[state=active]:text-foreground"
-                            >
-                              Cliente
-                            </TabsTrigger>
-                            <TabsTrigger
-                              value="trip"
-                              className="rounded-sm px-2 py-1 text-xs text-muted-foreground transition-colors data-[state=active]:bg-background data-[state=active]:text-foreground"
-                            >
-                              Viagem
-                            </TabsTrigger>
-                            <TabsTrigger
-                              value="pricing"
-                              className="rounded-sm px-2 py-1 text-xs text-muted-foreground transition-colors data-[state=active]:bg-background data-[state=active]:text-foreground"
-                            >
+                          <TabsList className="grid w-full grid-cols-5 rounded-md border border-border/50 bg-card/80 p-1">
+                            <TabsTrigger value="overview">Resumo</TabsTrigger>
+                            <TabsTrigger value="admin">Admin</TabsTrigger>
+                            <TabsTrigger value="trip">Viagem</TabsTrigger>
+                            <TabsTrigger value="pricing">
                               Financeiro
+                            </TabsTrigger>
+                            <TabsTrigger
+                              value="payment"
+                              disabled={
+                                !quotation.totalPrice ||
+                                quotation.totalPrice <= 0
+                              }
+                              title={
+                                !quotation.totalPrice
+                                  ? "Preencha o financeiro para liberar"
+                                  : ""
+                              }
+                            >
+                              Pagamento
                             </TabsTrigger>
                           </TabsList>
 
                           <div className="relative mt-4 flex-1">
-                            <ScrollArea className="h-full min-h-[320px] pr-2 sm:min-h-[360px]">
+                            <ScrollArea className="h-full min-h-[360px] pr-2">
+                              {/* OVERVIEW igual ao seu */}
                               <TabsContent
                                 value="overview"
                                 className="space-y-4"
                               >
-                                <section className="grid gap-3 sm:grid-cols-2">
-                                  <InfoItem
-                                    label="Status"
-                                    value={statusLabel}
-                                  />
-                                  <InfoItem
-                                    label="Criada em"
-                                    value={formatDate(
-                                      quotation.createdAt,
-                                      "dd/MM/yyyy HH:mm"
-                                    )}
-                                  />
-                                  <InfoItem
-                                    label="Última atualização"
-                                    value={formatDate(
-                                      quotation.updatedAt,
-                                      "dd/MM/yyyy HH:mm"
-                                    )}
-                                  />
-                                  <InfoItem
-                                    label="Responsável"
-                                    value={
-                                      quotation.assignedTo?.name ||
-                                      "Não atribuído"
-                                    }
-                                    helper={
-                                      quotation.assignedTo?.email ?? undefined
-                                    }
-                                  />
-                                  <InfoItem
-                                    label="Tipo de viagem"
-                                    value={
-                                      quotation.tripType === "ROUND_TRIP"
-                                        ? "Ida e volta"
-                                        : "Somente ida"
-                                    }
-                                  />
-                                  <InfoItem
-                                    label="Cabine"
-                                    value={
-                                      quotation.cabinClass ?? "Não informado"
-                                    }
-                                  />
-                                </section>
-
-                                <section className="grid gap-3 sm:grid-cols-3">
-                                  <InfoItem
-                                    label="Adultos"
-                                    value={quotation.adultsCount.toString()}
-                                  />
-                                  <InfoItem
-                                    label="Crianças"
-                                    value={quotation.childrenCount.toString()}
-                                  />
-                                  <InfoItem
-                                    label="Bebês"
-                                    value={quotation.infantsCount.toString()}
-                                  />
-                                </section>
-
-                                {(quotation.observations ||
-                                  quotation.responseNotes) && (
-                                  <section className="grid gap-2">
-                                    {quotation.observations && (
-                                      <InfoBlock
-                                        label="Observações do cliente"
-                                        value={quotation.observations}
-                                      />
-                                    )}
-                                    {quotation.responseNotes && (
-                                      <InfoBlock
-                                        label="Notas internas"
-                                        value={quotation.responseNotes}
-                                      />
-                                    )}
-                                  </section>
-                                )}
+                                <QuotationOverviewTab q={quotation} />
                               </TabsContent>
 
-                              <TabsContent
-                                value="customer"
-                                className="space-y-4"
-                              >
-                                <section className="grid gap-3 sm:grid-cols-2">
-                                  <InfoItem
-                                    label="Nome"
-                                    value={quotation.clientName}
-                                  />
-                                  <InfoItem
-                                    label="E-mail"
-                                    value={quotation.clientEmail}
-                                  />
-                                  <InfoItem
-                                    label="Telefone"
-                                    value={quotation.clientPhone}
-                                  />
-                                  <InfoItem
-                                    label="CPF"
-                                    value={quotation.clientCPF}
-                                  />
-                                  <InfoItem
-                                    label="Empresa"
-                                    value={quotation.company ?? "—"}
-                                  />
-                                </section>
+                              {/* ADMIN: status + responsável + validade + notas/condições */}
+                              <TabsContent value="admin" className="space-y-4">
+                                <AdminTabContent quotation={quotation} />
                               </TabsContent>
 
+                              {/* TRIP: igual ao seu (read-only) */}
                               <TabsContent value="trip" className="space-y-4">
-                                <section className="grid gap-3">
-                                  <InfoItem
-                                    label="Origem"
-                                    value={`${quotation.origin.city} (${quotation.origin.iataCode})`}
-                                    helper={quotation.origin.name}
-                                  />
-                                  <InfoItem
-                                    label="Destino"
-                                    value={`${quotation.destination.city} (${quotation.destination.iataCode})`}
-                                    helper={quotation.destination.name}
-                                  />
-                                  <InfoItem
-                                    label="Data de embarque"
-                                    value={formatDate(quotation.departureDate)}
-                                  />
-                                  <InfoItem
-                                    label="Data de retorno"
-                                    value={formatDate(quotation.returnDate)}
-                                  />
-                                  <InfoItem
-                                    label="Validade da proposta"
-                                    value={formatDate(
-                                      quotation.validUntil,
-                                      "dd/MM/yyyy HH:mm"
-                                    )}
-                                  />
-                                </section>
-
-                                {quotation.conditions && (
-                                  <InfoBlock
-                                    label="Condições"
-                                    value={quotation.conditions}
-                                  />
-                                )}
+                                <QuotationTripTab q={quotation} />
                               </TabsContent>
 
+                              {/* FINANCEIRO: editável */}
                               <TabsContent
                                 value="pricing"
                                 className="space-y-4"
                               >
-                                <section className="grid gap-3 sm:grid-cols-2">
-                                  <InfoItem
-                                    label="Valor por adulto"
-                                    value={formatCurrency(quotation.adultPrice)}
-                                  />
-                                  <InfoItem
-                                    label="Valor por criança"
-                                    value={formatCurrency(quotation.childPrice)}
-                                  />
-                                  <InfoItem
-                                    label="Valor por bebê"
-                                    value={formatCurrency(
-                                      quotation.infantPrice
-                                    )}
-                                  />
-                                  <InfoItem
-                                    label="Taxas adicionais"
-                                    value={formatCurrency(
-                                      quotation.additionalFees
-                                    )}
-                                  />
-                                  <InfoItem
-                                    label="Total"
-                                    value={formatCurrency(quotation.totalPrice)}
-                                  />
-                                </section>
+                                <FinancialTabContent quotation={quotation} />
+                              </TabsContent>
+
+                              {/* PAGAMENTO: usa tua action existente */}
+                              <TabsContent
+                                value="payment"
+                                className="space-y-4"
+                              >
+                                <PaymentTabContent quotation={quotation} />
                               </TabsContent>
                             </ScrollArea>
                           </div>

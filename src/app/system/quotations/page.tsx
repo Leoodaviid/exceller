@@ -1,7 +1,10 @@
 import { prisma } from "@/services/prisma";
 import { Prisma, QuotationStatus } from "@generated/prisma";
 import { QuotationFilters } from "@/components/admin/quotation-filters";
-import { QuotationsTable, SerializableQuotation } from "@/components/admin/quotations-table";
+import {
+  QuotationsTable,
+  SerializableQuotation,
+} from "@/components/admin/quotations-table";
 
 async function getQuotations(search?: string, status?: string) {
   const where: Prisma.QuotationWhereInput = {};
@@ -24,8 +27,26 @@ async function getQuotations(search?: string, status?: string) {
   return prisma.quotation.findMany({
     where,
     include: {
-      origin: true,
-      destination: true,
+      origin: {
+        select: {
+          city: true,
+          iataCode: true,
+          icaoCode: true,
+          name: true,
+          state: true,
+          country: true,
+        },
+      },
+      destination: {
+        select: {
+          city: true,
+          iataCode: true,
+          icaoCode: true,
+          name: true,
+          state: true,
+          country: true,
+        },
+      },
       assignedTo: {
         select: {
           name: true,
@@ -50,49 +71,53 @@ export default async function QuotationsPage({
   const quotations = await getQuotations(search, status);
 
   const serializableQuotations: SerializableQuotation[] = quotations.map(
-    (quotation) => ({
-      id: quotation.id,
-      protocol: quotation.protocol,
-      clientName: quotation.clientName,
-      clientEmail: quotation.clientEmail,
-      clientPhone: quotation.clientPhone,
-      clientCPF: quotation.clientCPF,
-      company: quotation.company ?? null,
-      tripType: quotation.tripType,
-      departureDate: quotation.departureDate.toISOString(),
-      returnDate: quotation.returnDate?.toISOString() ?? null,
-      adultsCount: quotation.adultsCount,
-      childrenCount: quotation.childrenCount,
-      infantsCount: quotation.infantsCount,
-      cabinClass: quotation.cabinClass ?? null,
-      observations: quotation.observations ?? null,
-      status: quotation.status,
-      responseNotes: quotation.responseNotes ?? null,
-      adultPrice: quotation.adultPrice?.toNumber() ?? null,
-      childPrice: quotation.childPrice?.toNumber() ?? null,
-      infantPrice: quotation.infantPrice?.toNumber() ?? null,
-      additionalFees: quotation.additionalFees?.toNumber() ?? null,
-      totalPrice: quotation.totalPrice?.toNumber() ?? null,
-      conditions: quotation.conditions ?? null,
-      validUntil: quotation.validUntil?.toISOString() ?? null,
-      createdAt: quotation.createdAt.toISOString(),
-      updatedAt: quotation.updatedAt.toISOString(),
+    (q) => ({
+      id: q.id,
+      protocol: q.protocol,
+      clientName: q.clientName,
+      clientEmail: q.clientEmail,
+      clientPhone: q.clientPhone,
+      clientCPF: q.clientCPF,
+      company: q.company ?? null,
+      tripType: String(q.tripType), // <- enum -> string
+      departureDate: q.departureDate.toISOString(),
+      returnDate: q.returnDate?.toISOString() ?? null,
+      adultsCount: q.adultsCount,
+      childrenCount: q.childrenCount,
+      infantsCount: q.infantsCount,
+      cabinClass: q.cabinClass ?? null,
+      observations: q.observations ?? null,
+      status: String(q.status), // <- enum -> string
+      responseNotes: q.responseNotes ?? null,
+      adultPrice: q.adultPrice?.toNumber() ?? null,
+      childPrice: q.childPrice?.toNumber() ?? null,
+      infantPrice: q.infantPrice?.toNumber() ?? null,
+      additionalFees: q.additionalFees?.toNumber() ?? null,
+      totalPrice: q.totalPrice?.toNumber() ?? null,
+      conditions: q.conditions ?? null,
+      validUntil: q.validUntil?.toISOString() ?? null,
+      createdAt: q.createdAt.toISOString(),
+      updatedAt: q.updatedAt.toISOString(),
       origin: {
-        city: quotation.origin.city,
-        iataCode: quotation.origin.iataCode,
-        name: quotation.origin.name,
-        state: quotation.origin.state,
+        city: q.origin.city,
+        iataCode: q.origin.iataCode, // string | null
+        icaoCode: q.origin.icaoCode ?? null, // string | null
+        name: q.origin.name,
+        state: q.origin.state, // string | null
+        country: q.origin.country, // string
       },
       destination: {
-        city: quotation.destination.city,
-        iataCode: quotation.destination.iataCode,
-        name: quotation.destination.name,
-        state: quotation.destination.state,
+        city: q.destination.city,
+        iataCode: q.destination.iataCode,
+        icaoCode: q.destination.icaoCode ?? null,
+        name: q.destination.name,
+        state: q.destination.state,
+        country: q.destination.country,
       },
-      assignedTo: quotation.assignedTo
+      assignedTo: q.assignedTo
         ? {
-            name: quotation.assignedTo.name,
-            email: quotation.assignedTo.email,
+            name: q.assignedTo.name ?? null,
+            email: q.assignedTo.email ?? null,
           }
         : null,
     })
