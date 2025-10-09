@@ -7,7 +7,7 @@ import Logo from "../../../public/images/logo.png";
 
 const Footer = () => {
   return (
-    <footer className="relative pt-16 pb-8 md:pb-0 w-full overflow-hidden">
+    <footer className="relative pt-16 md:pb-0 w-full overflow-hidden">
       <Wrapper>
         <Container animation="scaleUp" delay={0.3}>
           <div className="absolute top-0 w-4/5 mx-auto inset-x-0 h-px bg-gradient-to-r from-[#050505] via-primary/40 to-[#050505]"></div>
@@ -99,7 +99,7 @@ const Footer = () => {
           </p>
         </div>
       </Container>
-      <Container animation="fadeUp" delay={1}>
+      <Container animation="fadeUp" delay={2}>
         <div className="py-2 flex flex-col md:flex-row items-center justify-center z-50 relative">
           <p className="text-sm text-muted-foreground/40">
             © Powered by{" "}
@@ -113,7 +113,6 @@ const Footer = () => {
           </p>
         </div>
       </Container>
-
       <div className="border-t border-border/80 py-2 flex flex-col md:flex-row items-center blur-[4rem] justify-center bg-primary/40 absolute bottom-0 lg:bottom-0 inset-x-0 h-6" />
     </footer>
   );

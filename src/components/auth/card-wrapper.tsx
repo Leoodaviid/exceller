@@ -27,7 +27,7 @@ const CardWrapper = ({
   return (
     <Card
       className={cn(
-        "w-full h-full lg:w-2/5 flex flex-col justify-center rounded-none",
+        "w-full h-full lg:w-2/5 flex flex-col justify-center rounded-none py-0",
         className
       )}
     >

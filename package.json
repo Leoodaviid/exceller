@@ -14,7 +14,8 @@
     "reset": "npm exec prisma migrate reset",
     "trigger:dev": "npx trigger.dev@latest dev",
     "trigger:deploy": "npx trigger.dev@v4-beta deploy",
-    "seed": "tsx prisma/seeds/seed.ts"
+    "seed": "tsx prisma/seeds/seed.ts",
+    "icons": "tsx scripts/gen-icons.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
@@ -88,7 +89,10 @@
     "@types/react-dom": "19.2.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
+    "png-to-ico": "^3.0.1",
     "prisma": "^6.17.0",
+    "sharp": "^0.34.4",
+    "svgo": "^4.0.0",
     "tailwindcss": "^4",
     "tsx": "^4.20.6",
     "tw-animate-css": "^1.3.4",

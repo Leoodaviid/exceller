@@ -17,7 +17,7 @@ export function TravelBanner() {
         </div>
 
         <h1 className="text-5xl font-bold text-white mb-6 text-balance">
-          Explore o Mundo com Exceller Agency
+          Explore o Mundo com a Exceller
         </h1>
 
         <p className="text-xl text-muted-foreground max-w-md text-balance">
@@ -31,7 +31,7 @@ export function TravelBanner() {
             <div className="text-sm text-muted-foreground">Destinos</div>
           </div>
           <div>
-            <div className="text-3xl font-bold text-primary mb-2">50k+</div>
+            <div className="text-3xl font-bold text-primary mb-2">1k+</div>
             <div className="text-sm text-muted-foreground">Clientes</div>
           </div>
           <div>

@@ -41,7 +41,7 @@ const AboutHero = () => {
                 <div className="flex items-center gap-2">
                   <CheckCircle2Icon className="size-4 text-primary" />
                   <span className="text-sm text-muted-foreground font-medium">
-                    Mais de 80 integrações com companhias e meios de pagamento
+                    Mais de 20 integrações com companhias e meios de pagamento
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -81,13 +81,13 @@ const AboutHero = () => {
               <span className="text-xs text-center text-muted-foreground uppercase">
                 clientes corporativos ativos
               </span>
-              <h3 className="text-3xl font-semibold">1.200+</h3>
+              <h3 className="text-3xl font-semibold">230+</h3>
             </div>
             <div className="flex flex-col items-center justify-center gap-2">
               <span className="text-xs text-center text-muted-foreground uppercase">
                 trechos emitidos por mês
               </span>
-              <h3 className="text-3xl font-semibold">50k+</h3>
+              <h3 className="text-3xl font-semibold">80+</h3>
             </div>
             <div className="flex flex-col items-center justify-center gap-2">
               <span className="text-xs text-center text-muted-foreground uppercase">

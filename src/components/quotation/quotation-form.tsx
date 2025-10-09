@@ -240,7 +240,7 @@ export const QuotationForm = ({ className, onSuccess }: QuotationFormProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Data de saída*</FormLabel>
-                    <FormControl>
+                    <FormControl className="w-44 sm:w-full">
                       <Input
                         type="date"
                         value={(field.value as string) ?? ""}
@@ -258,7 +258,7 @@ export const QuotationForm = ({ className, onSuccess }: QuotationFormProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Data de retorno*</FormLabel>
-                    <FormControl>
+                    <FormControl className="w-44 sm:w-full">
                       <Input
                         type="date"
                         value={(field.value as string) ?? ""}

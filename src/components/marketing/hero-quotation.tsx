@@ -50,7 +50,7 @@ export function HeroQuotation() {
           </Wrapper>
 
           <Container delay={0.3}>
-            <Card className="bg-black/65 relative backdrop-blur-sm p-6 md:p-8 shadow-2xl">
+            <Card className="bg-black/65 relative backdrop-blur-sm p-4 md:p-8 shadow-2xl">
               <QuotationForm className="space-y-6" />
             </Card>
           </Container>
