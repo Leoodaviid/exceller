@@ -497,7 +497,7 @@ jobs:
 
           # Create notification payload
           json_payload=$(jq -n \
-            --arg title "$status_emoji Boltz - $overall_status" \
+            --arg title "$status_emoji Exceller - $overall_status" \
             --arg branch "$GITHUB_REF_NAME" \
             --arg commit "$commit_short" \
             --arg author "$GITHUB_ACTOR" \
