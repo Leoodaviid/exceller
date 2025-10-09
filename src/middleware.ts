@@ -61,5 +61,5 @@ export default auth(async (req) => {
 
 export const config = {
     runtime: 'nodejs',
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [ "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|site.webmanifest|images/|icons/|og/|fonts/|.*\\.(?:png|jpg|jpeg|gif|svg|webp|ico|woff2?|ttf|eot)$).*)",],
 };

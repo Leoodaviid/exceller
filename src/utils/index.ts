@@ -1,4 +1,4 @@
-import { generateMetadata } from "./metadata";
+import { generateMetadata } from "./seo";
 import { generateQuotationProtocol } from "./protocol";
 
 export {

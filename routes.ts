@@ -8,7 +8,22 @@ export const adminRoutes = ["/system", "/system/:path*"];
  * These routes do not require authentication
  * @type {string[]}
  */
-export const publicRoutes = ["/","/about", "/integrations","/quotation", "/contact","/help", "/auth/verify-email", "/sample/:path*"];
+export const publicRoutes = [
+  "/",
+  "/about",
+  "/integrations",
+  "/quotation",
+  "/contact",
+  "/help",
+  "/auth/verify-email",
+  "/sample/:path*",
+  "/images/:path*",
+  "/icons/:path*",
+  "/og/:path*",
+  "/robots.txt",
+  "/sitemap.xml",
+  "/site.webmanifest",
+];
 
 /**
  * An array of routes that are used for authentication
