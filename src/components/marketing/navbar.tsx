@@ -51,7 +51,7 @@ const Navbar = ({ user }: NavbarProps) => {
         >
           <Link href="/" className="flex items-center gap-2">
             <Image src={Logo} alt="Exceller Logo" width={40} height={32} />
-            <span className="font-bold text-base">Exceller Agency</span>
+            <span className="font-bold text-base">Exceller</span>
           </Link>
         </motion.div>
 

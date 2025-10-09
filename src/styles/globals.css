@@ -65,6 +65,7 @@
   }
 }
 
+/* === Tema base === */
 :root {
   --radius: 0.625rem;
   --background: #0a0a0a;
@@ -137,17 +138,33 @@
   --sidebar-ring: #e8c96f;
 }
 
+/* === Base Layer === */
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+
+  html,
+  body {
+    background-color: var(
+      --background
+    ) !important; /* garante preto no mobile */
   }
 
   body {
     @apply bg-background text-foreground;
     touch-action: manipulation;
   }
+
+  /* garante altura total para evitar “faixas” de cor */
+  #__next,
+  #root {
+    min-height: 100dvh;
+    background: var(--background);
+  }
 }
 
+/* === Seleção / Scrollbar === */
 ::selection {
   background-color: rgba(92, 92, 92, 0.471);
   color: #fff;
@@ -156,22 +173,20 @@
 ::-webkit-scrollbar {
   width: 0.25rem;
 }
-
 ::-webkit-scrollbar-thumb {
   background-color: #404040;
   border-radius: 0.25rem;
 }
-
 ::-webkit-scrollbar-track {
   background-color: #101010;
 }
 
+/* === Mídia / Conteúdo === */
 img,
 image {
   user-select: none;
   pointer-events: none;
 }
-
 h1,
 h2,
 h3,
@@ -181,51 +196,37 @@ h6 {
   font-family: var(--font-heading);
 }
 
-/* iOS specific styles for theme color */
+/* === iOS specific fixes (sem forçar cor de fundo) === */
 @supports (-webkit-touch-callout: none) {
   body {
-    background-color: #252525;
-  }
-
-  /* Ensure status bar color on iOS */
-  @media screen and (max-width: 1024px) {
-    html {
-      background-color: #252525;
-    }
-  }
-
-  /* iOS safe area support */
-  body {
+    /* Safe areas para notch/bottom bar */
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
   }
 
-  /* Prevent zoom on input focus */
+  /* Suaviza scroll e evita jank */
+  html {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Evita zoom ao focar inputs */
   input,
   textarea,
   select {
     font-size: 16px !important;
   }
-
-  /* Smooth scrolling for iOS */
-  html {
-    -webkit-overflow-scrolling: touch;
-  }
 }
 
-/* Web app specific styles for iOS */
+/* === PWA (standalone) no iOS — sem cor fixa === */
 @media all and (display-mode: standalone) {
   body {
-    background-color: #252525;
-  }
-
-  /* Full screen in standalone mode */
-  body {
+    /* mantém apenas os safe-areas */
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
+    /* cor continua vindo de var(--background) via base */
   }
 }
