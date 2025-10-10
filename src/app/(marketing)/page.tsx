@@ -6,7 +6,6 @@ import Hero from "@/components/marketing/hero";
 import { HeroQuotation } from "@/components/marketing/hero-quotation";
 import HowItWorks from "@/components/marketing/how-it-works";
 import Stats from "@/components/marketing/stats";
-import Testimonials from "@/components/marketing/testimonials";
 
 const HomePage = () => {
   return (
@@ -18,7 +17,6 @@ const HomePage = () => {
       <Features />
       <Faq />
       <Stats />
-      <Testimonials />
       <CTA />
     </div>
   );
