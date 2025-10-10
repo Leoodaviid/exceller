@@ -26,47 +26,46 @@ const HelpGuides = () => {
           </div>
         </Container>
 
-        <Container delay={0.1}>
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-            {HELP_GUIDES.map((guide) => (
-              <article
-                key={guide.title}
-                className="flex h-full flex-col rounded-3xl border border-border/60 bg-[#0A0A0A]/70 p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/60 hover:bg-[#121212]/85"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="rounded-full border border-primary/50 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-                    {guide.badge}
-                  </span>
-                  <span className="flex items-center gap-1 text-xs font-semibold text-muted-foreground">
-                    {guide.time} leitura
-                    <ArrowUpRightIcon className="size-4 text-primary" />
-                  </span>
-                </div>
+        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+          {HELP_GUIDES.map((guide, index) => (
+            <Container
+              key={guide.title}
+              delay={0.1 + index * 0.1}
+              className="flex h-full flex-col rounded-3xl border border-border/60 bg-[#0A0A0A]/70 p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/60 hover:bg-[#121212]/85"
+            >
+              <div className="flex items-center justify-between">
+                <span className="rounded-full border border-primary/50 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                  {guide.badge}
+                </span>
+                <span className="flex items-center gap-1 text-xs font-semibold text-muted-foreground">
+                  {guide.time} leitura
+                  <ArrowUpRightIcon className="size-4 text-primary" />
+                </span>
+              </div>
 
-                <h3 className="mt-4 text-lg font-semibold leading-tight">
-                  {guide.title}
-                </h3>
-                <p className="mt-3 text-sm text-muted-foreground">
-                  {guide.description}
-                </p>
+              <h3 className="mt-4 text-lg font-semibold leading-tight">
+                {guide.title}
+              </h3>
+              <p className="mt-3 text-sm text-muted-foreground">
+                {guide.description}
+              </p>
 
-                <ul className="mt-6 space-y-4 text-sm text-muted-foreground">
-                  {guide.steps.map((step, index) => (
-                    <li
-                      key={step}
-                      className="relative flex gap-3 rounded-2xl bg-[#121212]/70 p-4"
-                    >
-                      <span className="mt-1 flex size-7 flex-none items-center justify-center rounded-full bg-primary/15 text-sm font-semibold text-primary">
-                        {(index + 1).toString().padStart(2, "0")}
-                      </span>
-                      <span>{step}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </Container>
+              <ul className="mt-6 space-y-4 text-sm text-muted-foreground">
+                {guide.steps.map((step, stepIndex) => (
+                  <li
+                    key={step}
+                    className="relative flex gap-3 rounded-2xl bg-[#121212]/70 p-4"
+                  >
+                    <span className="mt-1 flex size-7 flex-none items-center justify-center rounded-full bg-primary/15 text-sm font-semibold text-primary">
+                      {(stepIndex + 1).toString().padStart(2, "0")}
+                    </span>
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ul>
+            </Container>
+          ))}
+        </div>
       </Wrapper>
     </section>
   );

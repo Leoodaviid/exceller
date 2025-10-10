@@ -26,41 +26,40 @@ const HelpSupport = () => {
           </div>
         </Container>
 
-        <Container delay={0.1}>
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-            {SUPPORT_CHANNELS.map((channel) => (
-              <div
-                key={channel.title}
-                className={cn(
-                  "flex h-full flex-col rounded-3xl border border-border/50 bg-[#0C0C0C]/70 p-6 transition-all duration-300",
-                  "hover:-translate-y-1 hover:border-primary/60 hover:bg-[#121212]/85"
-                )}
-              >
-                <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <channel.icon className="size-6" />
-                </div>
-                <h3 className="mt-5 text-lg font-semibold leading-tight">
-                  {channel.title}
-                </h3>
-                <p className="mt-3 text-sm text-muted-foreground">
-                  {channel.description}
-                </p>
-                <div className="mt-auto flex flex-col gap-3 pt-6">
-                  <span className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                    {channel.availability}
-                  </span>
-                  <Link
-                    href={channel.href}
-                    className="group inline-flex items-center gap-2 text-sm font-semibold text-primary transition-all duration-300"
-                  >
-                    {channel.actionLabel}
-                    <ArrowRightIcon className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Link>
-                </div>
+        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+          {SUPPORT_CHANNELS.map((channel, index) => (
+            <Container
+              key={channel.title}
+              delay={0.1 + index * 0.1}
+              className={cn(
+                "flex h-full flex-col rounded-3xl border border-border/50 bg-[#0C0C0C]/70 p-6 transition-all duration-300",
+                "hover:-translate-y-1 hover:border-primary/60 hover:bg-[#121212]/85"
+              )}
+            >
+              <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <channel.icon className="size-6" />
               </div>
-            ))}
-          </div>
-        </Container>
+              <h3 className="mt-5 text-lg font-semibold leading-tight">
+                {channel.title}
+              </h3>
+              <p className="mt-3 text-sm text-muted-foreground">
+                {channel.description}
+              </p>
+              <div className="mt-auto flex flex-col gap-3 pt-6">
+                <span className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+                  {channel.availability}
+                </span>
+                <Link
+                  href={channel.href}
+                  className="group inline-flex items-center gap-2 text-sm font-semibold text-primary transition-all duration-300"
+                >
+                  {channel.actionLabel}
+                  <ArrowRightIcon className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+              </div>
+            </Container>
+          ))}
+        </div>
       </Wrapper>
     </section>
   );
