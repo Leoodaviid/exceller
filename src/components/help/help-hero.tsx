@@ -9,15 +9,14 @@ import { ArrowRightIcon, SearchIcon } from "lucide-react";
 
 const HelpHero = () => {
   return (
-    <div className="relative z-0 w-full overflow-hidden">
-      <div className="absolute -top-28 inset-x-0 -z-10 mx-auto w-[80%] h-48 rounded-full blur-[6rem] bg-[radial-gradient(86.02%_172.05%_at_50%_-40%,rgba(212,175,55,0.75)_0%,rgba(5,5,5,0)_75%)]"></div>
-      <div className="absolute bottom-0 inset-x-0 -z-10 mx-auto w-[90%] h-32 rounded-full blur-[5rem] bg-[radial-gradient(86.02%_172.05%_at_50%_100%,rgba(212,175,55,0.45)_0%,rgba(5,5,5,0)_75%)]"></div>
+    <div className="relative z-0 w-full h-full">
+      <div className="absolute -top-16 inset-x-0 -z-10 mx-auto w-3/4 h-32 lg:h-60 rounded-full blur-[5rem] bg-[radial-gradient(86.02%_172.05%_at_50%_-40%,rgba(212,175,55,0.8)_0%,rgba(5,5,5,0)_80%)]"></div>
 
       <Wrapper className="pt-24 pb-20 lg:pt-32 lg:pb-24">
         <div className="flex flex-col items-center text-center gap-6">
-          <Container className="flex items-center justify-center gap-x-2 px-3 py-1.5 rounded-full border border-border/60 bg-[#0B0B0B]/70 backdrop-blur">
+          <Container className="flex items-center justify-center gap-x-1 px-3 py-1.5 relative w-max mx-auto rounded-full before:absolute before:inset-0 before:-z-10 before:p-[1px] before:rounded-3xl before:bg-gradient-to-b before:from-neutral-700 before:to-neutral-900 before:content-[''] after:absolute after:inset-[1px] after:-z-10 after:rounded-[22px] after:bg-[#181818]/60">
             <Icons.stars className="size-5 text-primary" />
-            <span className="text-xs md:text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+            <span className="text-xs md:text-sm font-medium text-muted-foreground">
               Central de Ajuda Exceller
             </span>
           </Container>
