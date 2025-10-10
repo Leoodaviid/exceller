@@ -1,5 +1,4 @@
 import { base, heading } from "./fonts";
-import { TESTIMONIALS } from "./testimonials";
 import { NAV_LINKS, PRODUCT_LINKS, RESOURCES_LINKS } from "./links";
 import { PRICING_PLANS } from "./pricing";
 import { FEATURES } from "./features";
@@ -12,7 +11,6 @@ import { CONTACT_CARDS } from "./contact";
 export {
     base,
     heading,
-    TESTIMONIALS,
     NAV_LINKS,
     PRODUCT_LINKS,
     RESOURCES_LINKS,

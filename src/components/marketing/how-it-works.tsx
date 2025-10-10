@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ChartSpline, ClipboardCheck, ClipboardList } from "lucide-react";
 import Hiw from "../../../public/images/hiw.png";
 import Hiw2 from "../../../public/images/hiw2.png";
-import Hiw3 from "../../../public/images/hiw3.svg";
+import Hiw3 from "../../../public/images/hiw3.png";
 
 const HowItWorks = () => {
   return (

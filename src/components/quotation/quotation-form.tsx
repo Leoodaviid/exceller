@@ -17,14 +17,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { AirportCombobox, AirportSelection } from "./airport-combobox";
-import { toast } from "sonner";
 import { cn } from "@/lib";
 import Cleave from "cleave.js/react";
 import "cleave.js/dist/addons/cleave-phone.br";
-import FormError from "@/components/auth/form-error";
-import FormSuccess from "@/components/auth/form-success";
 import { Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 
 const DEFAULT_VALUES: QuotationFormInput = {
   fullName: "",
@@ -46,7 +44,6 @@ const DEFAULT_VALUES: QuotationFormInput = {
 
 type QuotationFormProps = {
   className?: string;
-  onSuccess?: (payload: { protocol: string; quotationId: string }) => void;
 };
 
 const tripTypeOptions = [
@@ -54,13 +51,11 @@ const tripTypeOptions = [
   { label: "Só ida", value: "ONE_WAY" as const },
 ];
 
-export const QuotationForm = ({ className, onSuccess }: QuotationFormProps) => {
+export const QuotationForm = ({ className }: QuotationFormProps) => {
   const [originSelection, setOriginSelection] = useState<AirportSelection>();
   const [destinationSelection, setDestinationSelection] =
     useState<AirportSelection>();
   const [isPending, startTransition] = useTransition();
-  const [formError, setFormError] = useState<string | undefined>();
-  const [formSuccess, setFormSuccess] = useState<string | undefined>();
 
   const form = useForm<QuotationFormInput>({
     resolver: zodResolver(QuotationSchema),
@@ -69,16 +64,6 @@ export const QuotationForm = ({ className, onSuccess }: QuotationFormProps) => {
   });
 
   const tripType = form.watch("tripType");
-
-  useEffect(() => {
-    if (!formSuccess) return;
-
-    const timeout = setTimeout(() => {
-      setFormSuccess(undefined);
-    }, 6000);
-
-    return () => clearTimeout(timeout);
-  }, [formSuccess]);
 
   useEffect(() => {
     if (tripType === "ONE_WAY") {
@@ -110,15 +95,12 @@ export const QuotationForm = ({ className, onSuccess }: QuotationFormProps) => {
   };
 
   const onInvalid = (errors: any) => {
-    console.error("Formulário inválido. Erros:", errors);
-    // Opcional: toast.error("Preencha todos os campos obrigatórios.");
+    toast.error("Preencha todos os campos obrigatórios.");
   };
 
   const onSubmit = (values: QuotationFormInput) => {
     console.log("🚀 ~ onSubmit ~ values:", values);
     startTransition(async () => {
-      setFormError(undefined);
-      setFormSuccess(undefined);
       const response = await createQuotation(values);
 
       if (response?.issues) {
@@ -126,21 +108,14 @@ export const QuotationForm = ({ className, onSuccess }: QuotationFormProps) => {
       }
 
       if (response?.error) {
-        setFormError(response.error);
         toast.error(response.error);
         return;
       }
 
       if (response?.success) {
         const successMessage = `${response.success} Protocolo ${response.protocol}.`;
-        setFormSuccess(successMessage);
+        toast.success(successMessage);
         resetForm();
-        if (onSuccess && response.quotationId) {
-          onSuccess({
-            protocol: response.protocol,
-            quotationId: response.quotationId,
-          });
-        }
       }
     });
   };
@@ -156,11 +131,6 @@ export const QuotationForm = ({ className, onSuccess }: QuotationFormProps) => {
         onSubmit={form.handleSubmit(onSubmit, onInvalid)}
         className={cn("space-y-8", className)}
       >
-        <div className="space-y-3">
-          <FormSuccess message={formSuccess} />
-          <FormError message={formError} />
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={form.control}

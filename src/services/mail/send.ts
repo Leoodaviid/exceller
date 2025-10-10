@@ -274,7 +274,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
                               <p class="footer-text" style="margin:0 0 1px;color:#6b7280;font-size:15px;line-height:22px">Agência de Viagens &amp; Emissão de Passagens Aéreas</p>
                               <p class="footer-text" style="margin:0 0 1px;font-size:15px;line-height:22px"><span style="font-weight:700">Telefone/WhatsApp:</span> <a href="tel:+5585981801316" style="color:#b08330;text-decoration:none">(85) 98180-1316</a></p>
                               <p class="footer-text" style="margin:0 0 1px;font-size:15px;line-height:22px"><span style="font-weight:700">E-mail:</span> <a href="mailto:contato@excelleragency.com" style="color:#b08330;text-decoration:none">contato@excelleragency.com</a></p>
-                              <p class="footer-text" style="margin:0 0 1px;font-size:15px;line-height:22px"><span style="font-weight:700">Site:</span> <a href="https://www.excelleragency.com" target="_blank" rel="noopener noreferrer" style="color:#b08330;text-decoration:none">c</a></p>
+                              <p class="footer-text" style="margin:0 0 1px;font-size:15px;line-height:22px"><span style="font-weight:700">Site:</span> <a href="https://www.excelleragency.com" target="_blank" rel="noopener noreferrer" style="color:#b08330;text-decoration:none">www.excelleragency.com</a></p>
                               <p class="footer-text" style="margin:0;color:#6b7280;font-size:14px;line-height:20px">Tornando sua próxima viagem realidade</p>
                             </div>
                           </td>

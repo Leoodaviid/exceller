@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Fragment } from "react";
-import { Toaster } from "sonner";
+import { Toaster } from "../ui/sonner";
 
 interface Props {
   children: React.ReactNode;
@@ -10,7 +10,7 @@ interface Props {
 const Providers = ({ children }: Props) => {
   return (
     <Fragment>
-      <Toaster richColors theme="dark" position="bottom-center" />
+      <Toaster />
       {children}
     </Fragment>
   );
