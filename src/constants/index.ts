@@ -7,6 +7,12 @@ import { STATS } from "./stats";
 import { BLOGS } from "./blogs";
 import { MISSION } from "./mission";
 import { CONTACT_CARDS } from "./contact";
+import {
+  HELP_CATEGORIES,
+  HELP_GUIDES,
+  HELP_QUICK_ACTIONS,
+  SUPPORT_CHANNELS,
+} from "./help";
 
 export {
     base,
@@ -22,4 +28,8 @@ export {
     MISSION,
     QUESTIONS,
     CONTACT_CARDS,
+    HELP_CATEGORIES,
+    HELP_GUIDES,
+    SUPPORT_CHANNELS,
+    HELP_QUICK_ACTIONS,
 }
