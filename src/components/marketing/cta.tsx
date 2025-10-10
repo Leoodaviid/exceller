@@ -1,3 +1,4 @@
+"use client";
 import { CheckCircle2 } from "lucide-react";
 import React from "react";
 import Wrapper from "../global/wrapper";
@@ -7,6 +8,17 @@ import { Button } from "../ui/button";
 import AirPlane from "../../../public/images/airplane.png";
 
 const CTA = () => {
+  const handleWhatsAppClick = () => {
+    const message =
+      "Olá! Estou visitando o site da Exceller e gostaria de organizar minha próxima viagem.";
+    const phoneNumber = "+55 85 981801316";
+    const cleanedPhoneNumber = phoneNumber.replace(/\D/g, "");
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${cleanedPhoneNumber}?text=${encodedMessage}`;
+
+    // Open WhatsApp in a new tab
+    window.open(whatsappUrl, "_blank");
+  };
   return (
     <div className="flex flex-col items-center justify-center relative w-full py-16 lg:py-24 overflow-hidden">
       <div className="absolute top-0 -right-1/3 -z-10 ml-auto w-4/5 h-32 lg:h-48 rounded-full blur-[5rem] bg-[radial-gradient(86.02%_172.05%_at_50%_-40%,rgba(212,175,55,0.6)_0%,rgba(5,5,5,0)_80%)]"></div>
@@ -50,7 +62,11 @@ const CTA = () => {
               </div>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8 sm:mt-16 w-full">
                 <div className="w-full sm:w-auto">
-                  <Button size="lg" className="w-full sm:w-auto">
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto"
+                    onClick={handleWhatsAppClick}
+                  >
                     Falar com a Exceller
                   </Button>
                 </div>

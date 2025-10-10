@@ -3,7 +3,7 @@ import { PhoneIcon, MailIcon, MapPinIcon } from "lucide-react";
 export const CONTACT_CARDS = [
     {
         title: "Telefone",
-        value: "+55 (11) 4000-1212",
+        value: "+55 (85) 98180-1316",
         icon: PhoneIcon
     },
     {
@@ -13,7 +13,7 @@ export const CONTACT_CARDS = [
     },
     {
         title: "E-mail",
-        value: "contato@exceller.agency",
+        value: "contato@excelleragency.com",
         icon: MailIcon
     }
 ] as const;
