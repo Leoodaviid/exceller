@@ -5,7 +5,7 @@ import Wrapper from "../global/wrapper";
 
 const Companies = () => {
   return (
-    <div className="flex flex-col items-center justify-center w-full py-16 lg:py-24">
+    <div className="flex flex-col items-center justify-center w-full py-16 lg:py-36">
       <Wrapper>
         <Container>
           <div className="flex flex-col items-center justify-center px-2 md:px-0">

@@ -34,9 +34,10 @@ const ContactHero = () => {
           <Container delay={0.3} className="w-full">
             <div className="flex flex-col md:flex-row justify-center gap-6 w-full mt-10">
               {CONTACT_CARDS.map((card, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col items-center justify-center p-6 rounded-2xl bg-[#0A0A0A] border border-border/50"
+                <Container
+                  key={card.title}
+                  delay={0.1 + index * 0.1}
+                  className="flex flex-col items-center justify-center rounded-2xl border border-border/50 bg-[#0A0A0A] p-6"
                 >
                   <div className="size-12 rounded-lg bg-primary/10 flex items-center justify-center">
                     <card.icon className="size-6 text-primary" />
@@ -45,7 +46,7 @@ const ContactHero = () => {
                   <p className="text-sm text-muted-foreground mt-1">
                     {card.value}
                   </p>
-                </div>
+                </Container>
               ))}
             </div>
           </Container>

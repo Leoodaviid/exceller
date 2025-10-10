@@ -1,7 +1,4 @@
 "use client";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-
 import { Button } from "@/components/ui/button";
 import { EllipsisVertical } from "lucide-react";
 import {
@@ -24,34 +21,12 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QUOTATION_STATUS_META } from "@/constants/quotation-status";
 import { cn } from "@/lib";
+import { formatCurrency, formatDate } from "@/utils";
 import { FinancialTabContent } from "@/app/system/_components/financial-tab";
 import { AdminTabContent } from "@/app/system/_components/admin-tab-content";
 import { PaymentTabContent } from "@/app/system/_components/payment-tab";
 import { QuotationOverviewTab } from "@/app/system/_components/quotation-overview-tab";
 import { QuotationTripTab } from "@/app/system/_components/quotation-trip-tab";
-
-const formatCurrency = (value: number | null | undefined) => {
-  if (value === null || value === undefined) {
-    return "—";
-  }
-
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-    minimumFractionDigits: 2,
-  }).format(value);
-};
-
-const formatDate = (
-  value: string | null | undefined,
-  pattern = "dd/MM/yyyy"
-) => {
-  if (!value) {
-    return "—";
-  }
-
-  return format(new Date(value), pattern, { locale: ptBR });
-};
 
 export type SerializableQuotation = {
   id: string;

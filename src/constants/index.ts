@@ -1,5 +1,4 @@
 import { base, heading } from "./fonts";
-import { TESTIMONIALS } from "./testimonials";
 import { NAV_LINKS, PRODUCT_LINKS, RESOURCES_LINKS } from "./links";
 import { PRICING_PLANS } from "./pricing";
 import { FEATURES } from "./features";
@@ -8,11 +7,16 @@ import { STATS } from "./stats";
 import { BLOGS } from "./blogs";
 import { MISSION } from "./mission";
 import { CONTACT_CARDS } from "./contact";
+import {
+  HELP_CATEGORIES,
+  HELP_GUIDES,
+  HELP_QUICK_ACTIONS,
+  SUPPORT_CHANNELS,
+} from "./help";
 
 export {
     base,
     heading,
-    TESTIMONIALS,
     NAV_LINKS,
     PRODUCT_LINKS,
     RESOURCES_LINKS,
@@ -24,4 +28,8 @@ export {
     MISSION,
     QUESTIONS,
     CONTACT_CARDS,
+    HELP_CATEGORIES,
+    HELP_GUIDES,
+    SUPPORT_CHANNELS,
+    HELP_QUICK_ACTIONS,
 }

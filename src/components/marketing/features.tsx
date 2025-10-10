@@ -19,18 +19,17 @@ const Features = () => {
                     </div>
                 </Container>
 
-                <Container>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 mt-10">
-                        {FEATURES.map((feature, index) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 mt-10">
+                    {FEATURES.map((feature, index) => (
+                        <Container key={feature.title} delay={0.1 + index * 0.1}>
                             <Feature
-                                key={index}
                                 title={feature.title}
                                 desc={feature.desc}
                                 icon={feature.icon}
                             />
-                        ))}
-                    </div>
-                </Container>
+                        </Container>
+                    ))}
+                </div>
             </Wrapper>
         </div>
     )
