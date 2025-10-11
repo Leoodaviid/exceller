@@ -7,7 +7,6 @@ import "@/styles/globals.css";
 import { generateMetadata } from "@/utils";
 import { Viewport } from "next";
 import Script from "next/script";
-import { WhatsAppButton } from "@/components/ui/wpp-button";
 
 export const metadata = generateMetadata({ canonicalPath: "/" });
 
@@ -71,11 +70,6 @@ export default async function RootLayout({
           )}
         >
           <Providers>{children}</Providers>
-          <WhatsAppButton
-            phoneNumber="+55 85 981801316"
-            className="left-6 right-auto"
-            message="Olá! Estou visitando o site da Exceller e gostaria de obter mais informações."
-          />
         </body>
       </SessionProvider>
     </html>

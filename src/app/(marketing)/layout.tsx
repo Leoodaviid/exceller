@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import Footer from "@/components/marketing/footer";
 import Navbar from "@/components/marketing/navbar";
+import { WhatsAppButton } from "@/components/ui/wpp-button";
 
 export default async function MarketingLayout({
   children,
@@ -15,6 +16,11 @@ export default async function MarketingLayout({
     <main className="w-full grow relative">
       <Navbar user={user} />
       {children}
+      <WhatsAppButton
+        phoneNumber="+55 85 981801316"
+        className="left-6 right-auto"
+        message="Olá! Estou visitando o site da Exceller e gostaria de obter mais informações."
+      />
       <Footer />
     </main>
   );

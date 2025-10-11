@@ -4,6 +4,7 @@ import Container from "../global/container";
 import Wrapper from "../global/wrapper";
 import { PRODUCT_LINKS, RESOURCES_LINKS } from "@/constants";
 import Logo from "../../../public/images/logo.png";
+import Icons from "../global/icons";
 
 const Footer = () => {
   return (
@@ -37,13 +38,24 @@ const Footer = () => {
                   <p>+55 (85) 98180-1316</p>
                 </Link>
               </div>
+              <div className="mt-6 flex items-center gap-3">
+                <Link
+                  href="https://www.instagram.com/excelleragency"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Exceller Agency no Instagram"
+                  className="inline-flex items-center justify-center rounded-full border border-border/50 bg-[#111111]/70 p-2 text-muted-foreground transition-colors duration-300 hover:border-primary/60 hover:text-primary"
+                >
+                  <Icons.instagram className="size-5" />
+                </Link>
+              </div>
             </div>
           </Container>
 
           <div className="grid grid-cols-2 md:place-items-end w-full">
             <Container animation="fadeUp" delay={0.5}>
               <div>
-                <h3 className="text-base font-medium">Product</h3>
+                <h3 className="text-base font-medium">Conheça a Exceller</h3>
                 <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                   {PRODUCT_LINKS.map((link, index) => (
                     <Container
@@ -67,7 +79,7 @@ const Footer = () => {
 
             <Container animation="fadeUp" delay={0.5}>
               <div>
-                <h3 className="text-base font-medium">Resources</h3>
+                <h3 className="text-base font-medium">Suporte e contato</h3>
                 <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                   {RESOURCES_LINKS.map((link, index) => (
                     <Container
