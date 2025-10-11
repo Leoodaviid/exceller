@@ -1,11 +1,11 @@
 import React from "react";
 import Wrapper from "../global/wrapper";
-import Icons from "../global/icons";
 import Image from "next/image";
 import Container from "../global/container";
 import { Button } from "../ui/button";
 import { CheckCircle2Icon } from "lucide-react";
 import AboutHeroImage from "../../../public/images/about-hero.png";
+import BadgeWrapper from "../global/badge-wrapper";
 
 const AboutHero = () => {
   return (
@@ -15,12 +15,7 @@ const AboutHero = () => {
       <Wrapper className="py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
           <div className="flex flex-col w-full z-10">
-            <Container>
-              <div className="flex items-center justify-center gap-x-1 px-3 py-1.5 relative w-max mx-auto md:mx-0 rounded-full before:absolute before:inset-0 before:-z-10 before:p-[1px] before:rounded-3xl before:bg-gradient-to-b before:from-neutral-700 before:to-neutral-900 before:content-[''] after:absolute after:inset-[1px] after:-z-10 after:rounded-[22px] after:bg-[#141414]/70">
-                <Icons.stars className="size-5" />
-                <span className="text-sm text-white">Exceller Agency</span>
-              </div>
-            </Container>
+            <BadgeWrapper text="Exceller Agency" />
 
             <Container delay={0.1}>
               <h2 className="text-balance !leading-[1.25] text-4xl md:text-6xl font-semibold tracking-tight text-center lg:text-left mt-6 w-full">
@@ -30,25 +25,27 @@ const AboutHero = () => {
 
             <Container delay={0.2}>
               <p className="text-base lg:text-lg text-muted-foreground text-center lg:text-left mt-4 max-w-2xl mx-auto lg:mx-0">
-                Somos especialistas em distribuição aérea, pagamentos e
-                atendimento consultivo para que cada viagem aconteça com
-                tranquilidade e eficiência.
+                Especialistas em gestão de viagens, oferecemos atendimento
+                exclusivo e personalizado para viagens tranquilas e sem
+                imprevistos.
               </p>
             </Container>
 
             <Container delay={0.3}>
-              <div className="hidden lg:flex flex-col gap-2 mt-6">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2Icon className="size-4 text-primary" />
+              <div className="hidden lg:flex flex-col gap-3 mt-6">
+                <div className="flex items-center gap-3 rounded-full border border-border/50 bg-[#111111]/70 px-4 py-2">
+                  <CheckCircle2Icon className="size-5 text-primary flex-none" />
                   <span className="text-sm text-muted-foreground font-medium">
-                    Mais de 20 integrações com companhias e meios de pagamento
+                    Mais de 20 integrações com companhias nacionais e
+                    internacionais, garantimos agilidade e as melhores
+                    condições.
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2Icon className="size-4 text-primary" />
+                <div className="flex items-center gap-3 rounded-full border border-border/50 bg-[#111111]/70 px-4 py-2">
+                  <CheckCircle2Icon className="size-5 text-primary flex-none" />
                   <span className="text-sm text-muted-foreground font-medium">
-                    Suporte consultivo 24/7 para emissões, remarcações e
-                    auditorias
+                    Suporte 24/7 para cotações, emissões, remarcações e tudo que
+                    sua viagem precisar.
                   </span>
                 </div>
               </div>
@@ -56,44 +53,52 @@ const AboutHero = () => {
 
             <Container delay={0.3}>
               <div className="mt-6 flex justify-center lg:justify-start">
-                <Button size="md">Falar com especialista</Button>
+                <Button size="lg" className="rounded-full px-7">
+                  Falar com especialista
+                </Button>
               </div>
             </Container>
           </div>
 
           <Container className="w-full z-30">
-            <div className="">
+            <div className="group p-4">
               <Image
                 src={AboutHeroImage}
                 alt="Exceller Agency - Conheça quem conecta milhares de viajantes todos os dias"
                 width={2932}
                 height={1664}
                 loading="eager"
-                className="w-full h-full"
+                className="w-full h-full rounded-[32px] object-cover transition-transform duration-500 group-hover:scale-[1.01]"
               />
             </div>
           </Container>
         </div>
 
         <Container delay={0.4}>
-          <div className="grid grid-cols-3 lg:place-items-stretch mt-16 lg:mt-24">
-            <div className="flex flex-col items-center justify-center gap-2">
-              <span className="text-xs text-center text-muted-foreground uppercase">
+          <div className="grid grid-cols-1 gap-4 mt-16 lg:mt-24 sm:grid-cols-3">
+            <div className="flex flex-col items-center justify-center gap-2 rounded-3xl border border-border/60 bg-[#0D0D0D]/75 p-6 text-center">
+              <span className="text-xs text-muted-foreground uppercase tracking-[0.24em]">
                 clientes corporativos ativos
               </span>
-              <h3 className="text-3xl font-semibold">230+</h3>
+              <h3 className="text-3xl font-semibold text-transparent bg-gradient-to-b from-[#f5f0d5] to-[#b8941f] bg-clip-text">
+                230+
+              </h3>
             </div>
-            <div className="flex flex-col items-center justify-center gap-2">
-              <span className="text-xs text-center text-muted-foreground uppercase">
+            <div className="flex flex-col items-center justify-center gap-2 rounded-3xl border border-border/60 bg-[#0D0D0D]/75 p-6 text-center">
+              <span className="text-xs text-muted-foreground uppercase tracking-[0.24em]">
                 trechos emitidos por mês
               </span>
-              <h3 className="text-3xl font-semibold">80+</h3>
+              <h3 className="text-3xl font-semibold text-transparent bg-gradient-to-b from-[#f5f0d5] to-[#b8941f] bg-clip-text">
+                80+
+              </h3>
             </div>
-            <div className="flex flex-col items-center justify-center gap-2">
-              <span className="text-xs text-center text-muted-foreground uppercase">
+            <div className="flex flex-col items-center justify-center gap-2 rounded-3xl border border-border/60 bg-[#0D0D0D]/75 p-6 text-center">
+              <span className="text-xs text-muted-foreground uppercase tracking-[0.24em]">
                 economia média por bilhete
               </span>
-              <h3 className="text-3xl font-semibold">18%</h3>
+              <h3 className="text-3xl font-semibold text-transparent bg-gradient-to-b from-[#f5f0d5] to-[#b8941f] bg-clip-text">
+                18%
+              </h3>
             </div>
           </div>
         </Container>

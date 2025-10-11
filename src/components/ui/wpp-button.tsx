@@ -2,8 +2,8 @@
 
 import { Fragment } from "react";
 import { Button } from "@/components/ui/button";
-import { WhatsAppIcon } from "../icons/wpp-icon";
 import { cn } from "@/lib";
+import Icons from "../global/icons";
 
 interface WhatsAppButtonProps {
   phoneNumber: string;
@@ -33,15 +33,14 @@ export function WhatsAppButton({
       <Button
         onClick={handleWhatsAppClick}
         className={cn(
-          "fixed bottom-6 left-6 rounded-full shadow-lg z-50",
-          "flex items-center justify-center gap-2",
+          "fixed bottom-5 left-4 rounded-full shadow-lg z-50 p-2 size-10",
+          "flex items-center justify-center",
           "bg-green-600 hover:bg-green-700 text-white",
-          "transition-all duration-300 hover:scale-105",
+          "cursor-pointer transition-colors duration-300",
           className
         )}
       >
-        <WhatsAppIcon className="h-5 w-5" />
-        <span>WhatsApp</span>
+        <Icons.whatsapp className="h-5 w-5" />
       </Button>
     </Fragment>
   );

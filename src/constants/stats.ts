@@ -1,21 +1,25 @@
-import ClockIcon from "../../public/icons/clock.svg";
-import ComputerIcon from "../../public/icons/computer.svg";
-import CrowIcon from "../../public/icons/crown.svg";
+import { Clock, Crown, TrendingUp, type LucideIcon } from "lucide-react";
 
-export const STATS = [
+type Stat = {
+    title: string;
+    value: string;
+    icon: LucideIcon;
+};
+
+export const STATS: Stat[] = [
     {
         title: "Cotações emitidas por mês",
         value: "3K+",
-        icon: CrowIcon
+        icon: Crown
     },
     {
         title: "Taxa média de economia",
         value: "18%",
-        icon: ComputerIcon
+        icon: TrendingUp
     },
     {
         title: "Tempo médio de resposta",
         value: "< 5 min",
-        icon: ClockIcon
+        icon: Clock
     }
 ];

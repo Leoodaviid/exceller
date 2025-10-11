@@ -6,6 +6,7 @@ import Container from "../global/container";
 import { Button } from "../ui/button";
 import { CheckCircle2Icon } from "lucide-react";
 import Integrations from "../../../public/images/integrations.png";
+import BadgeWrapper from "../global/badge-wrapper";
 
 const IntegrationsHero = () => {
   return (
@@ -15,53 +16,51 @@ const IntegrationsHero = () => {
       <Wrapper className="py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
           <div className="flex flex-col w-full z-10">
-            <Container>
-              <div className="flex items-center justify-center gap-x-1 px-3 py-1.5 relative w-max mx-auto rounded-full before:absolute before:inset-0 before:-z-10 before:p-[1px] before:rounded-3xl before:bg-gradient-to-b before:from-neutral-700 before:to-neutral-900 before:content-[''] after:absolute after:inset-[1px] after:-z-10 after:rounded-[22px] after:bg-[#181818]/60">
-                <Icons.stars className="size-5" />
-                <span className="text-sm text-white">Integrações Exceller</span>
-              </div>
-            </Container>
+            <BadgeWrapper text="Integrações Exceller" />
 
             <Container delay={0.1}>
               <h2 className="text-balance !leading-[1.25] text-4xl md:text-6xl font-semibold tracking-tight mt-6 w-full">
-                Conectamos companhias aéreas e parceiros para você
+                Voos nacionais e internacionais, conectados a você
               </h2>
             </Container>
 
             <Container delay={0.2}>
               <p className="text-base md:text-lg font-normal text-balance text-muted-foreground max-w-3xl mt-4">
-                A Exceller acessa GDS, acordos corporativos, meios de pagamento
-                e parceiros estratégicos para garantir que a sua cotação tenha
-                sempre a melhor combinação disponível.
+                A Exceller busca comodidade e excelência, conectando você aos
+                principais hotéis e companhias aéreas do Brasil e do mundo,
+                garantindo que sua cotação tenha sempre a melhor condição
+                disponível.
               </p>
             </Container>
 
             <Container delay={0.3}>
-              <div className="flex flex-col gap-2 mt-6">
-                <div className="flex items-center gap-2">
+              <div className="flex flex-col gap-3 mt-6">
+                <div className="flex items-center gap-3 rounded-full border border-border/50 bg-[#111111]/70 px-4 py-2">
                   <CheckCircle2Icon className="size-4 text-primary" />
                   <span className="text-sm text-muted-foreground font-medium">
-                    Acesso direto a GDS, NDC e tarifas exclusivas
+                    Tarifas exclusivas
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3 rounded-full border border-border/50 bg-[#111111]/70 px-4 py-2">
                   <CheckCircle2Icon className="size-4 text-primary" />
                   <span className="text-sm text-muted-foreground font-medium">
-                    Processamos pagamentos e emissões com total segurança
+                    Pagamentos e emissões com total segurança
                   </span>
                 </div>
               </div>
             </Container>
 
             <Container delay={0.3}>
-              <div className="mt-6">
-                <Button size="md">Explorar integrações</Button>
+              <div className="mt-8">
+                <Button size="lg" className="rounded-full px-7">
+                  Explorar integrações
+                </Button>
               </div>
             </Container>
           </div>
 
           <Container className="w-full z-30 flex items-center justify-center">
-            <div className="aspect-square w-11/12 sm:w-10/12 md:w-9/12 lg:w-[70%] bg-white/10 shadow-md rounded-full flex items-center justify-center overflow-hidden">
+            <div className="group aspect-square w-11/12 sm:w-10/12 md:w-9/12 lg:w-[70%] flex items-center justify-center overflow-hidden">
               <Image
                 src={Integrations}
                 alt="Integrações Exceller"
@@ -70,7 +69,7 @@ const IntegrationsHero = () => {
                 height={0}
                 loading="eager"
                 sizes="100vw"
-                className="w-full h-full object-contain pt-4 px-6"
+                className="h-full w-full object-contain p-6 transition-transform duration-500 group-hover:scale-[1.02]"
               />
             </div>
           </Container>

@@ -7,6 +7,7 @@ import { STATS } from "./stats";
 import { BLOGS } from "./blogs";
 import { MISSION } from "./mission";
 import { CONTACT_CARDS } from "./contact";
+import { STORY_HIGHLIGHTS } from "./story";
 import {
   HELP_CATEGORIES,
   HELP_GUIDES,
@@ -28,6 +29,7 @@ export {
     MISSION,
     QUESTIONS,
     CONTACT_CARDS,
+    STORY_HIGHLIGHTS,
     HELP_CATEGORIES,
     HELP_GUIDES,
     SUPPORT_CHANNELS,
